@@ -1,7 +1,6 @@
 const validator = require('validator')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken');
-const nodemailer = require("nodemailer")
 const transporter = require("../config/nodemailer")
 const users = require("../models/userModel")
 const {EMAIL_VERIFY_TEMPLATE, PASSWORD_RESET_TEMPLATE} = require("../config/emailTemplates")
@@ -11,12 +10,16 @@ const register = async (req, res) => {
     const {name, email, password} = req.body
     try {
         const existUser = await users.findOne({email: email})        
+        const usedName = await users.findOne({name: name})        
         if(!name || !email || !password) {
             return res.status(400).json({success: false, message: "Name,Email and Password are Required"})
         }
 
         if(existUser) {
             return res.status(409).json({success: false, message: "User Already Exist"})
+        }
+        if(usedName) {
+            return res.status(409).json({success: false, message: "Name Already Used"})
         }
         if(!validator.isEmail(email)) {
             return res.status(400).json({success: false, message: "Invalid email"})
@@ -187,15 +190,23 @@ const updateUser = async (req, res) => {
         const user = await users.findById(req.user.id)
 
         if(req.file) {
+            if (user.imagePublicId) {
+                await cloudinary.uploader.destroy(user.imagePublicId);
+            }
+
             const response = await cloudinary.uploader.upload(req.file.path);
             const image = response.secure_url;
             user.image = image
+            user.imagePublicId = response.public_id;
         }
 
-        if (newName == user.name) {
-            return res.status(400).json({success: false, message: "Name is Already Used"})
+        if (newName && newName !== user.name) {
+            const existingUser = await users.findOne({ name: newName });
+            if (existingUser && existingUser._id.toString() !== user._id.toString()) {
+                return res.status(400).json({ success: false, message: "Name is already in use" });
+            }
+            user.name = newName;
         }
-        user.name = newName || user.name
 
         if (oldPassword && newPassword) {
             const samePassword = await bcrypt.compare(oldPassword, user.password)
@@ -223,7 +234,7 @@ const updateUser = async (req, res) => {
 
         await user.save()
 
-        return res.status(200).json({success: true, message: "Data Updated Successfully", userData: user})
+        return res.status(200).json({success: true, message: "Data Updated Successfully"})
     } catch (error) {
         return res.status(500).json({success: false, message: error.message})
     }
@@ -231,7 +242,7 @@ const updateUser = async (req, res) => {
 
 const userData = async (req, res) => {
     try {
-        const user = await users.findById(req.user.id)
+        const user = await users.findById(req.user.id).select("-password -verifyOtp -verifyOtpExpired -resetOtp -resetOtpExpired")
         if(!user) {
             return res.status(404).json({success: false, message: "User not found"})
         }
