@@ -4,7 +4,6 @@ const userSchema = new mongoose.Schema({
     image: {
         type: String,
         require: true,
-        default: ''
     },
     imagePublicId: {
         type: String,
@@ -22,13 +21,13 @@ const userSchema = new mongoose.Schema({
     },
     email: {
         type: String,
-        require: true,
+        required: true,
         unique: true
     },
     password: {
         type: String,
         require: true
-    }, 
+    },
     signUpWay: {
         type: String,
         enum: ['google', 'email'],
@@ -36,7 +35,7 @@ const userSchema = new mongoose.Schema({
     },
     verifyOtp: {
         type: Number,
-        default: ''
+        default: null
     },
     verifyOtpExpired: {
         type: Number,
@@ -48,7 +47,7 @@ const userSchema = new mongoose.Schema({
     },
     resetOtp: {
         type: Number,
-        default: ''
+        default: null
     },
     resetOtpExpired: {
         type: Number,
