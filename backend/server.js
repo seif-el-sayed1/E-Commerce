@@ -8,6 +8,7 @@ const passport = require('./config/passport');
 
 const connectCloudinary = require('./config/cloudinary');
 const userRouter = require("./routes/userRouter");
+const productRouter = require("./routes/productsRouter");
 
 
 connectDB();
@@ -23,6 +24,7 @@ app.use(express.json());
 app.use(passport.initialize());
 
 app.use('/api/auth', userRouter);
+app.use('/api/product', productRouter); 
 
 app.get("/", (req, res) => res.send("Api is running!"));
 
