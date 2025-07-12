@@ -73,8 +73,11 @@ const cancelOrder = async (req, res) => {
 const getUserOrders = async (req, res) => {
     try {
         const orders = await orderModel
-            .find({ userId: req.user.id })
-            .populate("products.productId")
+            .find({ userId: req.user.id }).select("-__v -paymentMethod -createdAt -updatedAt")
+            .populate({
+                path: "products.productId",
+                select: "image title price"
+            })
             .sort({ createdAt: -1 });
 
         if (!orders || orders.length === 0) {
@@ -88,8 +91,33 @@ const getUserOrders = async (req, res) => {
     }
 };
 
+const getAllOrders = async (req, res) => {
+    try {
+        const orders = await orderModel.find().select("-__v -createdAt -updatedAt")
+            .populate({
+                path: "products.productId",
+                select: "title price"
+            }) 
+            .populate({
+                path: "userId",
+                select: "name email" 
+            })
+            .sort({ createdAt: -1 });
+        if (!orders || orders.length === 0) {
+            return res.status(404).json({ success: false, message: "No orders found" });
+        }
+        const totalOrders = orders.length;
+        const totalProfit = orders.reduce((acc, order) => acc + order.totalPrice, 0);
+        
+        return res.status(200).json({ success: true, orders, totalOrders, totalProfit });
+    } catch (error) {
+        return res.status(500).json({ success: false, message: error.message });
+    }
+}
+
 module.exports = {
     submitOrder,
     getUserOrders,
     cancelOrder,
+    getAllOrders
 };
