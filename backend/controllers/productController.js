@@ -22,6 +22,7 @@ const addProduct = async (req, res) => {
             folder: "products"
         });
 
+        const finalPrice = price - (price * discountPercent / 100);
 
         const product = new productModel({
             image: result.secure_url,
@@ -30,6 +31,7 @@ const addProduct = async (req, res) => {
             description,
             price,
             discountPercent,
+            finalPrice,
             category,
             stock,
         });
@@ -80,6 +82,8 @@ const updateProduct = async (req, res) => {
         product.discountPercent = newDiscountPercent || product.discountPercent;
         product.category = newCategory || product.category;
         product.stock = newStock || product.stock;
+        
+        product.finalPrice = product.price - (product.price * product.discountPercent / 100);
 
         await product.save();
 
