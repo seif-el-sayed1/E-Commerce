@@ -2,7 +2,11 @@ const productModel = require("../models/productModel");
 const cloudinary = require('cloudinary').v2;
 
 const addProduct = async (req, res) => {
-    const { title, description, price, category, stock } = req.body;
+    const { title, description, price, discountPercent, category, stock } = req.body;
+
+    if (price <= 0 || stock < 0 || discountPercent < 0) {
+        return res.status(400).json({ success: false, message: "Invalid numerical values" });
+    }
 
     try {
         if (!title || !description || !price || !category || !stock || !req.file) {
@@ -18,12 +22,14 @@ const addProduct = async (req, res) => {
             folder: "products"
         });
 
+
         const product = new productModel({
             image: result.secure_url,
             imagePublicId: result.public_id, 
             title,
             description,
             price,
+            discountPercent,
             category,
             stock,
         });
@@ -37,20 +43,17 @@ const addProduct = async (req, res) => {
     }
 };
 
-
 const updateProduct = async (req, res) => {
-    const { newTitle, newDescription, newPrice, newCategory, newStock } = req.body;
+    const { newTitle, newDescription, newPrice, newDiscountPercent, newCategory, newStock } = req.body;
 
     try {
         const product = await productModel.findById(req.params.id);
 
-        if (product.title === newTitle || product.description === newDescription 
-            || product.price === Number(newPrice) || product.category === newCategory || product.stock === newStock) {
-            return res.status(400).json({ success: false, message: "You Can't Use The Same Values" });
-        }
-
         if (!product) {
             return res.status(404).json({ success: false, message: "Product not found" });
+        }
+        if (newPrice <= 0 || newStock < 0 || newDiscountPercent < 0) {
+            return res.status(400).json({ success: false, message: "Invalid numerical values" });
         }
 
         const existProduct = await productModel.findOne({ title: newTitle });
@@ -74,6 +77,7 @@ const updateProduct = async (req, res) => {
         product.title = newTitle || product.title;
         product.description = newDescription || product.description;
         product.price = newPrice || product.price;
+        product.discountPercent = newDiscountPercent || product.discountPercent;
         product.category = newCategory || product.category;
         product.stock = newStock || product.stock;
 
@@ -85,7 +89,6 @@ const updateProduct = async (req, res) => {
         return res.status(500).json({ success: false, message: error.message });
     }
 };
-
 
 const deleteProduct = async (req, res) => {
     try {
