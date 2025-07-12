@@ -35,6 +35,7 @@ const register = async (req, res) => {
 
         const user = new users({
             image,
+            imagePublicId: response.public_id,
             name,
             email, 
             password: hashPassword,
@@ -242,7 +243,7 @@ const updateUser = async (req, res) => {
 
 const userData = async (req, res) => {
     try {
-        const user = await users.findById(req.user.id).select("-password -verifyOtp -verifyOtpExpired -resetOtp -resetOtpExpired")
+        const user = await users.findById(req.user.id).select("-password -verifyOtp -verifyOtpExpired -resetOtp -resetOtpExpired -signUpWay -__v -createdAt -updatedAt")
         if(!user) {
             return res.status(404).json({success: false, message: "User not found"})
         }
@@ -261,6 +262,16 @@ const isAuthenticated = async (req, res) => {
     }
 }
 
+const getAllUsers = async (req, res) => {
+    try {
+        const allUsers = await users.find({role: "user"}).select("-password -isVerified -verifyOtp -verifyOtpExpired -resetOtp -resetOtpExpired -signUpWay -__v -createdAt -updatedAt")
+        const totalUsers = await users.countDocuments({role: "user"})
+        return res.status(200).json({success: true, allUsers, totalUsers})
+    } catch (error) {
+        return res.status(500).json({success: false, message: error.message})
+    }
+}
+
 module.exports = {
     register,
     login,
@@ -272,4 +283,5 @@ module.exports = {
     userData,
     isAuthenticated,
     updateUser,
+    getAllUsers
 }
