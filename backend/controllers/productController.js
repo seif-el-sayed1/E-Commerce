@@ -9,7 +9,7 @@ const addProduct = async (req, res) => {
     }
 
     try {
-        if (!title || !description || !price || !category || !stock || !req.file) {
+        if (!title || !description || !price || !category || !stock || !discountPercent || !req.file) {
             return res.status(400).json({ success: false, message: "All fields are required" });
         }
 
@@ -116,7 +116,7 @@ const deleteProduct = async (req, res) => {
 
 const getAllProducts = async (req, res) => {
     try {
-        const {page = 1, limit = 10, search, category} = req.query
+        const {page = 1, limit = 10, search, category, priceRange, sortOption} = req.query
         const query = {}
 
         if (search) {
@@ -125,12 +125,26 @@ const getAllProducts = async (req, res) => {
         if (category) {
             query.category = category
         }
+        
+        if(priceRange) {
+            const [min, max] = priceRange.split("-").map(Number)
+            query.finalPrice = { $gte: min, $lte: max }
+        }
+
+        const sort = {}
+        if(sortOption === "highToLow") {
+            sort.finalPrice = -1
+        } else if (sortOption === "lowToHigh") {
+            sort.finalPrice = 1
+        } else if (sortOption === "latest") {
+            sort.createdAt = -1
+        }
 
         const skip = (Number(page) - 1) * Number(limit);
         const totalProducts = await productModel.countDocuments(query);
         const totalPages = Math.ceil(totalProducts / Number(limit));
 
-        const products = await productModel.find(query).skip(skip).limit(Number(limit)).sort({ createdAt: -1 });;
+        const products = await productModel.find(query).skip(skip).limit(Number(limit)).sort(sort);;
         return res.status(200).json({ success: true, products, totalProducts, totalPages });
     } catch (error) {
         return res.status(500).json({ success: false, message: error.message });
