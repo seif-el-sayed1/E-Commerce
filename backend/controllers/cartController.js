@@ -122,7 +122,13 @@ const deleteCart = async (req, res) => {
 
 const getCart = async (req, res) => {
     try {
-        const cart = await cartModel.findOne({userId: req.user.id}).populate("products.productId")
+        const cart = await cartModel.findOne({ userId: req.user.id })
+                    .select("-__v -updatedAt -createdAt")
+                    .populate({
+                        path: "products.productId",
+                        select: "-__v -createdAt -updatedAt -category -stock -imagePublicId"
+                    });
+
         if(!cart) {
             return res.status(404).json({success: false, message: "Cart not found"})
         }
