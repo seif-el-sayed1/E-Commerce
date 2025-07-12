@@ -10,6 +10,7 @@ const connectCloudinary = require('./config/cloudinary');
 const userRouter = require("./routes/userRouter");
 const productRouter = require("./routes/productsRouter");
 const cartRouter = require("./routes/cartRouter");
+const wishlistRouter = require("./routes/wishListRouter");
 const orderRouter = require("./routes/orderRouter");
 
 connectDB();
@@ -27,6 +28,7 @@ app.use(passport.initialize());
 app.use('/api/auth', userRouter);
 app.use('/api/product', productRouter); 
 app.use('/api/cart', cartRouter);
+app.use('/api/wishlist', wishlistRouter);
 app.use('/api/order', orderRouter);
 
 app.get("/", (req, res) => res.send("Api is running!"));
