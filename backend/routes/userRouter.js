@@ -45,5 +45,7 @@ router.route('/update-user').put(verifyToken, upload.single('image'), userContro
 router.route('/get-user').get(verifyToken, userController.userData)
 //authentication
 router.route('/is-auth').get(verifyToken, userController.isAuthenticated)
+// get all users
+router.route('/get-all-users').get(userController.getAllUsers)
 
 module.exports = router;

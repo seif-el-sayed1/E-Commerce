@@ -10,5 +10,7 @@ router.route('/submit-order').post(verifyToken, orderController.submitOrder)
 router.route('/cancel-order').post(verifyToken, orderController.cancelOrder)
 // get user orders
 router.route('/get-user-orders').get(verifyToken, orderController.getUserOrders)
+// get all orders
+router.route('/get-all-orders').get(orderController.getAllOrders)
 
 module.exports = router
