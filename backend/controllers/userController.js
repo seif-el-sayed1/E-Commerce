@@ -267,10 +267,21 @@ const getAllUsers = async (req, res) => {
         if(req.user.role !== "admin") {
             return res.status(401).json({success: false, message: "Unauthorized"})
         }
+        const {page = 1, limit = 5} = req.query
 
-        const allUsers = await users.find({role: "user"}).select("-password -isVerified -verifyOtp -verifyOtpExpired -resetOtp -resetOtpExpired -signUpWay -__v -createdAt -updatedAt")
+        
+        const skip = (Number(page) - 1) * Number(limit);
+
+        const allUsers = await users.find({role: "user"})
+                                    .skip(skip)
+                                    .limit(Number(limit))
+                                    .select("-password -isVerified -verifyOtp -verifyOtpExpired -resetOtp -resetOtpExpired -signUpWay -__v -createdAt -updatedAt")
+                                    .sort({createdAt: -1})
+
         const totalUsers = await users.countDocuments({role: "user"})
-        return res.status(200).json({success: true, allUsers, totalUsers})
+        const totalPages = Math.ceil(totalUsers / Number(limit));
+        
+        return res.status(200).json({success: true, allUsers, totalUsers, totalPages })
     } catch (error) {
         return res.status(500).json({success: false, message: error.message})
     }

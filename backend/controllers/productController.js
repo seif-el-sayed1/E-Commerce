@@ -116,7 +116,7 @@ const deleteProduct = async (req, res) => {
 
 const getAllProducts = async (req, res) => {
     try {
-        const {page = 1, limit = 10, search, category, priceRange, sortOption} = req.query
+        const {page = 1, limit = 5, search, category, priceRange, sortOption} = req.query
         const query = {}
 
         if (search) {
