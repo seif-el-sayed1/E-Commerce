@@ -46,6 +46,6 @@ router.route('/get-user').get(verifyToken, userController.userData)
 //authentication
 router.route('/is-auth').get(verifyToken, userController.isAuthenticated)
 // get all users
-router.route('/get-all-users').get(userController.getAllUsers)
+router.route('/get-all-users').get(verifyToken, userController.getAllUsers)
 
 module.exports = router;

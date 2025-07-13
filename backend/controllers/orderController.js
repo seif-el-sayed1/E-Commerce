@@ -10,7 +10,7 @@ const submitOrder = async (req, res) => {
         if (!cart || cart.products.length === 0) {
             return res.status(404).json({ success: false, message: "Cart is empty" });
         }
-
+        
         const totalPrice = cart.products.reduce((acc, product) => {
             if (product.productDetails && typeof product.productDetails.price === 'number') {
                 return acc + product.productDetails.price * product.quantity;
@@ -93,6 +93,11 @@ const getUserOrders = async (req, res) => {
 
 const getAllOrders = async (req, res) => {
     try {
+        
+        if (req.user.role !== "admin") {
+            return res.status(401).json({ success: false, message: "Unauthorized" });
+        }
+
         const orders = await orderModel.find().select("-__v -createdAt -updatedAt")
             .populate({
                 path: "products.productDetails",

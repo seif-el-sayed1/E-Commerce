@@ -264,6 +264,10 @@ const isAuthenticated = async (req, res) => {
 
 const getAllUsers = async (req, res) => {
     try {
+        if(req.user.role !== "admin") {
+            return res.status(401).json({success: false, message: "Unauthorized"})
+        }
+
         const allUsers = await users.find({role: "user"}).select("-password -isVerified -verifyOtp -verifyOtpExpired -resetOtp -resetOtpExpired -signUpWay -__v -createdAt -updatedAt")
         const totalUsers = await users.countDocuments({role: "user"})
         return res.status(200).json({success: true, allUsers, totalUsers})
