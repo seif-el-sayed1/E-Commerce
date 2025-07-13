@@ -1,18 +1,18 @@
 const cartModel = require("../models/cartModel");
 
 const addToCart = async (req, res) => {
-    const { productId } = req.body;
+    const { productDetails } = req.body;
 
     try {
         let cart = await cartModel.findOne({ userId: req.user.id });
 
         if (cart) {
-            const product = cart.products.find(p => p.productId.toString() === productId);
+            const product = cart.products.find(p => p.productDetails.toString() === productDetails.toString());
 
             if (product) {
                 product.quantity += 1;
             } else {
-                cart.products.push({ productId, quantity: 1 });
+                cart.products.push({ productDetails, quantity: 1 });
             }
 
             await cart.save();
@@ -22,7 +22,7 @@ const addToCart = async (req, res) => {
             cart = new cartModel({
                 userId: req.user.id,
                 products: [{ 
-                    productId: productId, 
+                    productDetails: productDetails, 
                     quantity: 1 
                 }]
             });
@@ -37,14 +37,14 @@ const addToCart = async (req, res) => {
 };
 
 const increaseQuantity = async (req, res) => {
-    const {productId} = req.body
+    const { productDetails } = req.body
     try {
         const cart = await cartModel.findOne({userId: req.user.id})
         if(!cart) {
             return res.status(404).json({success: false, message: "Cart not found"})
         }
         
-        const productIndex = cart.products.findIndex(p => p.productId.toString() === productId)
+        const productIndex = cart.products.findIndex(p => p.productDetails.toString() === productDetails.toString())
         
         if (productIndex === -1) {
             return res.status(404).json({ success: false, message: "Product not found in cart" });
@@ -58,13 +58,13 @@ const increaseQuantity = async (req, res) => {
 }
 
 const decreaseQuantity = async (req, res) => {
-    const {productId} = req.body
+    const { productDetails } = req.body
     try {
         const cart = await cartModel.findOne({userId: req.user.id})
         if (!cart) {
             return res.status(404).json({ success: false, message: "Cart not found" });
         }
-        const productIndex = cart.products.findIndex(p => p.productId.toString() === productId);
+        const productIndex = cart.products.findIndex(p => p.productDetails.toString() === productDetails.toString());
         
         if (productIndex === -1) {
             return res.status(404).json({ success: false, message: "Product not found in cart" });
@@ -86,14 +86,14 @@ const decreaseQuantity = async (req, res) => {
 }
 
 const deleteFromCart = async (req, res) => {
-    const {productId} = req.body
+    const { productDetails } = req.body
     try {
         const cart = await cartModel.findOne({userId: req.user.id})
         if(!cart) {
             return res.status(404).json({success: false, message: "Cart not found"})
         }
 
-        const productIndex = cart.products.findIndex(p => p.productId.toString() === productId)
+        const productIndex = cart.products.findIndex(p => p.productDetails.toString() === productDetails.toString())
         
         if (productIndex === -1) {
             return res.status(404).json({ success: false, message: "Product not found in cart" });
@@ -125,7 +125,7 @@ const getCart = async (req, res) => {
         const cart = await cartModel.findOne({ userId: req.user.id })
                     .select("-__v -updatedAt -createdAt")
                     .populate({
-                        path: "products.productId",
+                        path: "products.productDetails",
                         select: "-__v -createdAt -updatedAt -category -stock -imagePublicId"
                     });
 
@@ -134,8 +134,8 @@ const getCart = async (req, res) => {
         }
 
         const total = cart.products.reduce((acc, product) => {
-            if (product.productId && product.productId.price) {
-                return acc + product.productId.price * product.quantity;
+            if (product.productDetails && product.productDetails.price) {
+                return acc + product.productDetails.price * product.quantity;
             }
             return acc;
         }, 0);

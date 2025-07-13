@@ -5,15 +5,15 @@ const submitOrder = async (req, res) => {
     const { address, phone } = req.body;
 
     try {
-        const cart = await cartModel.findOne({ userId: req.user.id }).populate("products.productId");
+        const cart = await cartModel.findOne({ userId: req.user.id }).populate("products.productDetails");
 
         if (!cart || cart.products.length === 0) {
             return res.status(404).json({ success: false, message: "Cart is empty" });
         }
 
         const totalPrice = cart.products.reduce((acc, product) => {
-            if (product.productId && typeof product.productId.price === 'number') {
-                return acc + product.productId.price * product.quantity;
+            if (product.productDetails && typeof product.productDetails.price === 'number') {
+                return acc + product.productDetails.price * product.quantity;
             }
             return acc;
         }, 0);
@@ -75,7 +75,7 @@ const getUserOrders = async (req, res) => {
         const orders = await orderModel
             .find({ userId: req.user.id }).select("-__v -paymentMethod -createdAt -updatedAt")
             .populate({
-                path: "products.productId",
+                path: "products.productDetails",
                 select: "image title price"
             })
             .sort({ createdAt: -1 });
@@ -95,7 +95,7 @@ const getAllOrders = async (req, res) => {
     try {
         const orders = await orderModel.find().select("-__v -createdAt -updatedAt")
             .populate({
-                path: "products.productId",
+                path: "products.productDetails",
                 select: "title price"
             }) 
             .populate({
