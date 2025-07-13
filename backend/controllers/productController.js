@@ -144,7 +144,9 @@ const getAllProducts = async (req, res) => {
         const totalProducts = await productModel.countDocuments(query);
         const totalPages = Math.ceil(totalProducts / Number(limit));
 
-        const products = await productModel.find(query).skip(skip).limit(Number(limit)).sort(sort);;
+        const products = await productModel.find(query)
+                        .select("-__v -imagePublicId -createdAt -updatedAt")
+                        .skip(skip).limit(Number(limit)).sort(sort);
         return res.status(200).json({ success: true, products, totalProducts, totalPages });
     } catch (error) {
         return res.status(500).json({ success: false, message: error.message });
