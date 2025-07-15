@@ -1,15 +1,20 @@
 const productModel = require("../models/productModel");
+const users = require("../models/userModel");
 const cloudinary = require('cloudinary').v2;
 
 const addProduct = async (req, res) => {
     const { title, description, price, discountPercent, category, stock } = req.body;
+    const user = await users.findById(req.user.id);
+    if (user.role !== "admin") {
+        return res.status(401).json({ success: false, message: "Unauthorized" });
+    }
 
     if (price <= 0 || stock < 0 || discountPercent < 0) {
         return res.status(400).json({ success: false, message: "Invalid numerical values" });
     }
 
     try {
-        if (!title || !description || !price || !category || !stock || !discountPercent || !req.file) {
+        if (!title || !description || !price || !category || !stock || !req.file)  {
             return res.status(400).json({ success: false, message: "All fields are required" });
         }
 
@@ -47,6 +52,11 @@ const addProduct = async (req, res) => {
 
 const updateProduct = async (req, res) => {
     const { newTitle, newDescription, newPrice, newDiscountPercent, newCategory, newStock } = req.body;
+
+    const user = await users.findById(req.user.id);
+    if (user.role !== "admin") {
+        return res.status(401).json({ success: false, message: "Unauthorized" });
+    }
 
     try {
         const product = await productModel.findById(req.params.id);
@@ -97,6 +107,11 @@ const updateProduct = async (req, res) => {
 const deleteProduct = async (req, res) => {
     try {
         const product = await productModel.findById(req.params.id);
+
+        if (req.user.role !== "admin") {
+            return res.status(401).json({ success: false, message: "Unauthorized" });
+        }
+
         if (!product) {
             return res.status(404).json({ success: false, message: "Product not found" });
         }
