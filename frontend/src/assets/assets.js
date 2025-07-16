@@ -6,6 +6,8 @@ import starIconFilled from "./starIconFilled.svg"
 import starIconOutlined from "./starIconOutlined.svg"
 import playstation from "./playstation.png"
 import soundbox from "./soundbox.png"
+import google from "./google.svg"
+import upload from "./upload.png"
 
 
 export const  assets ={
@@ -16,5 +18,7 @@ export const  assets ={
     starIconFilled,
     starIconOutlined,
     playstation,
-    soundbox
+    soundbox,
+    google,
+    upload
 }
