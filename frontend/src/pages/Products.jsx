@@ -1,4 +1,5 @@
 import { useEffect, useContext } from 'react';
+import { useLocation } from 'react-router-dom';
 import { ProductsContext } from '../context/ProductsContext';
 import { assets } from "../assets/assets";
 import { FiltersPanel } from '../components/FilterPanel'; 
@@ -52,6 +53,19 @@ export const Products = () => {
 
         return pages;
     };
+    
+    const location = useLocation();
+    useEffect(() => {
+        if (location.pathname === "/products") {
+            setFilters({
+                category: "",
+                priceRange: "",
+                sortOption: "",
+                page: 1,
+            });
+        }
+    }, [location.pathname]);
+
 
     return (
         <div className='relative mx-6 md:mx-16 lg:mx-24 xl:mx-32 my-6'>
