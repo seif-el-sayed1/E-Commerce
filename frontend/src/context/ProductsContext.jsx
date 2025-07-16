@@ -10,6 +10,9 @@ export const ProductsContextProvider = (props) => {
     const [loading, setLoading] = useState(true);
 
     const [products, setProducts] = useState([]);
+    
+    const [product, setProduct] = useState({});
+
     const [totalPages, setTotalPages] = useState(1);
     const [filters, setFilters] = useState({
         search: "",
@@ -32,11 +35,10 @@ export const ProductsContextProvider = (props) => {
             )
             if (data.success) {
                 toast.success(data.message, { position: "top-center" });
-            } else {
-                toast.error(data.message, { position: "top-center" });
             }
         } catch (error) {
-            toast.error(error.message, { position: "top-center" });
+            const message = error.response?.data?.message || error.message || "Something went wrong";
+            toast.error(message, { position: "top-center" });
         } finally {
             setLoading(false);
         }   
@@ -55,11 +57,10 @@ export const ProductsContextProvider = (props) => {
             )
             if (data.success) {
                 toast.success(data.message, { position: "top-center" });
-            } else {
-                toast.error(data.message, { position: "top-center" });
             }
         } catch (error) {
-            toast.error(error.message, { position: "top-center" });
+            const message = error.response?.data?.message || error.message || "Something went wrong";
+            toast.error(message, { position: "top-center" });
         } finally {
             setLoading(false);
         }
@@ -70,11 +71,10 @@ export const ProductsContextProvider = (props) => {
             const { data } = await axios.delete(`${backendUrl}/api/product/delete-product/${id}`)
             if (data.success) {
                 toast.success(data.message, { position: "top-center" });
-            } else {
-                toast.error(data.message, { position: "top-center" });
             }
         } catch (error) {
-            toast.error(error.message, { position: "top-center" });
+            const message = error.response?.data?.message || error.message || "Something went wrong";
+            toast.error(message, { position: "top-center" });
         } finally {
             setLoading(false);
         }
@@ -98,11 +98,10 @@ export const ProductsContextProvider = (props) => {
                 setProducts(data.products);
                 
                 setTotalPages(data.totalPages);
-            } else {
-                toast.error(data.message, { position: "top-center" });
-            }
+            } 
         } catch (error) {
-            toast.error(error.message, { position: "top-center" });
+            const message = error.response?.data?.message || error.message || "Something went wrong";
+            toast.error(message, { position: "top-center" });
         } finally {
             setLoading(false);
         }
@@ -111,14 +110,14 @@ export const ProductsContextProvider = (props) => {
 
     const getProductById = async (id) => {
         try {
+            setLoading(true);
             const { data } = await axios.get(`${backendUrl}/api/product/get-product/${id}`)
             if (data.success) {
-                return data.product;
-            } else {
-                toast.error(data.message, { position: "top-center" });
+                setProduct(data.product);
             }
         } catch (error) {
-            toast.error(error.message, { position: "top-center" });
+            const message = error.response?.data?.message || error.message || "Something went wrong";
+            toast.error(message, { position: "top-center" });
         } finally {
             setLoading(false);
         }
