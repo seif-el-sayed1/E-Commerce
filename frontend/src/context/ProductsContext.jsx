@@ -15,7 +15,7 @@ export const ProductsContextProvider = (props) => {
         search: "",
         category: "",
         priceRange: "",
-        sortOption: "latest",
+        sortOption: "",
         page: 1,
         limit: 6,
     });
@@ -124,9 +124,6 @@ export const ProductsContextProvider = (props) => {
         }
     }
 
-    useEffect(() => {
-        getAllProducts();
-    }, [filters])
 
     const value = {
         loading,
