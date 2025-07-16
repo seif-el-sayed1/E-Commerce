@@ -15,7 +15,7 @@ export const ProductsContextProvider = (props) => {
         search: "",
         category: "",
         priceRange: "",
-        sortOption: "",
+        sortOption: "latest",
         page: 1,
         limit: 6,
     });

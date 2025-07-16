@@ -3,7 +3,7 @@ import { ProductsContext } from "../context/ProductsContext";
 
 export const FiltersPanel = () => {
     const { filters, setFilters } = useContext(ProductsContext);
-    const [isOpen, setIsOpen] = useState(true);
+    const [isOpen, setIsOpen] = useState(false);
 
     const categories = ["All", "Earphone", "Headphone", "Smartphone", "Accessories", "Camera", "Laptop"];
     const priceRanges = [
