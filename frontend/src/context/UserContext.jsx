@@ -14,6 +14,48 @@ export const UserContextProvider = (props) => {
     const [isLoggedin, setIsLoggedin] = useState(false);
     const [userData, setUserData] = useState({});
     const [isAdmin, setIsAdmin] = useState(false)
+
+    const [state, setState] = useState("login");
+    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [image, setImage] = useState(null);
+    
+
+    const login = async (e) => {
+            setLoading(true);
+            e.preventDefault();
+            axios.defaults.withCredentials = true;
+            try {
+                if (state === "signUp") {
+                    const formData = new FormData();
+                    formData.append("name", name);
+                    formData.append("email", email);
+                    formData.append("password", password);
+                    formData.append("image", image);
+    
+                    const { data } = await axios.post(backendUrl + "/api/auth/register", formData);
+                    if (data.success) {
+                        setIsLoggedin(true);
+                        getUserData();
+                        navigate("/");
+                        setImage(null);
+                    } 
+                } else {
+                    const { data } = await axios.post(backendUrl + "/api/auth/login", { email, password });
+                    if (data.success) {
+                        setIsLoggedin(true);
+                        getUserData();
+                        navigate("/");
+                    }
+                }
+            } catch (error) {
+                const message = error.response?.data?.message || error.message || "Something went wrong";
+                toast.error(message, { position: "top-center" });
+            } finally {
+                setLoading(false);
+            }
+    };
     
     const authState = async () => {
         try {
@@ -25,35 +67,36 @@ export const UserContextProvider = (props) => {
                 setUserData(false)
             }
         } catch (error) {
-            console.log(error.message);
+            const message = error.response?.data?.message || error.message || "Something went wrong";
+            toast.error(message, { position: "top-center" });
         } finally {
             setLoading(false);
         }
     }
     
     const getUserData = async () => {
-        const {data} = await axios.get(backendUrl + "/api/auth/getUser")
+        const {data} = await axios.get(backendUrl + "/api/auth/get-user")
         if(data.success) {
             setIsLoggedin(true)
             setUserData(data.userData)
             setIsAdmin(data.userData.role == "admin");
-        } else {
-            toast.error(data.message) 
         }
     }
 
     const logout = async () => {
         try {
+            setLoading(true);
             axios.defaults.withCredentials = true;
             const { data } = await axios.post(backendUrl + "/api/auth/logout");
             if (data.success) {
-                toast.success(data.message, { position: "top-center" });
                 setUserData(null);
                 setIsLoggedin(false);
                 navigate("/");
             }
+            location.reload();
         } catch (error) {
-            toast.error(error.message, { position: "top-center" });
+                const message = error.response?.data?.message || error.message || "Something went wrong";
+                toast.error(message, { position: "top-center" });   
         } finally {
             setLoading(false);
         }
@@ -61,22 +104,33 @@ export const UserContextProvider = (props) => {
     
     const sentVerifyOtp = async () => {
         try {
+            setLoading(true);
             axios.defaults.withCredentials = true;
             const { data } = await axios.post(backendUrl + "/api/auth/send-verify-otp");
             if (data.success) {
                 toast.success(data.message, { position: "top-center" });
-                navigate('/verifyEmail');
-            } else {
-                toast.error(data.message, { position: "top-center" });
-            }
+                navigate('auth/verify-email');
+            } 
         } catch (error) {
-            toast.error(error.message, { position: "top-center" });
+            const message = error.response?.data?.message || error.message || "Something went wrong";
+            toast.error(message, { position: "top-center" });
         } finally {
             setLoading(false);
         }
     };
 
     const value = {
+        login,
+        state,
+        name,
+        email,
+        password,
+        image,
+        setState,
+        setName,
+        setEmail,
+        setPassword,
+        setImage,
         loading,
         setLoading,
         isLoggedin, 
