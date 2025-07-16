@@ -61,7 +61,7 @@ export const FiltersPanel = () => {
                 <>
                     {/* Category Filter */}
                     <div className="mb-4">
-                        <p className="font-medium mb-2">Category</p>
+                        <p className="font-medium my-2">Category</p>
                         <div className="flex flex-wrap gap-2">
                             {categories.map(cat => (
                                 <button
