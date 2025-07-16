@@ -28,8 +28,12 @@ const register = async (req, res) => {
             return res.status(400).json({success: false, message: "Please Enter Strong Password"})
         }
 
-        const response = await cloudinary.uploader.upload(req.file.path);
-        const image = response.secure_url;
+        const response = await cloudinary.uploader.upload(req.file.path, {
+            folder: "users",
+            transformation: [{ width: 300, height: 300  , crop: "limit" }]
+        });
+
+        const image = response.secure_url
 
         const hashPassword = await bcrypt.hash(password, 10)
 

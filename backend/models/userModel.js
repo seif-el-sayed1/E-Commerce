@@ -7,7 +7,6 @@ const userSchema = new mongoose.Schema({
     },
     imagePublicId: {
         type: String,
-        required: true
     },
     name: {
         type: String,
