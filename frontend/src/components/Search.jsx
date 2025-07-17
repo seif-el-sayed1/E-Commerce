@@ -76,7 +76,7 @@ export const Search = () => {
                         searchProducts.map((product) => (
                             <Link
                                 key={product._id}
-                                to={`/product/${product._id}`}
+                                to={`/products/${product._id}`}
                                 className="block px-4 py-3 hover:bg-[#37474F] text-white border-b border-gray-600 transition"
                                 onClick={() => setShowResults(false)}
                             >
