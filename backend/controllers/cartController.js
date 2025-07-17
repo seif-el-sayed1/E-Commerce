@@ -134,8 +134,8 @@ const getCart = async (req, res) => {
         }
 
         const total = cart.products.reduce((acc, product) => {
-            if (product.productDetails && product.productDetails.price) {
-                return acc + product.productDetails.price * product.quantity;
+            if (product.productDetails && product.productDetails.finalPrice) {
+                return acc + product.productDetails.finalPrice * product.quantity;
             }
             return acc;
         }, 0);
