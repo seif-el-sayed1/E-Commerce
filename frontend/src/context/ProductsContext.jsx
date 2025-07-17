@@ -136,7 +136,8 @@ export const ProductsContextProvider = (props) => {
         setTotalPages,
         filters,
         setFilters,
-        getProductById  
+        getProductById,
+        product
     }
 
     return (

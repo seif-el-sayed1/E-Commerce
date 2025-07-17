@@ -1,10 +1,13 @@
-import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { useState, useEffect, useContext } from "react";
+import { ProductsContext } from "../context/ProductsContext";
+import { Link, useNavigate } from "react-router-dom";
 import { assets } from "../assets/assets";
 import { toast } from "react-hot-toast";
 import axios from "axios";
 
 export const PopularProducts = () => {
+    const navigate = useNavigate();
+    const { getProductById } = useContext(ProductsContext);
     const backendUrl = import.meta.env.VITE_BACKEND_URL;
     const [popularProducts, setPopularProducts] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -77,7 +80,8 @@ export const PopularProducts = () => {
                                 </div>
                                 <div className="flex justify-between items-center">
                                     <p className="font-semibold text-white">${product.price}</p>
-                                    <button className="cursor-pointer bg-transparent border border-[#1E88E5] hover:bg-[#1E88E5] transition duration-300 text-white text-sm px-4 py-1.5 rounded-lg">
+                                    <button onClick={() =>{getProductById(product._id), navigate("/products/" + product._id), window.scrollTo({ top: 0, behavior: "smooth" })} } 
+                                        className="cursor-pointer bg-transparent border border-[#1E88E5] hover:bg-[#1E88E5] transition duration-300 text-white text-sm px-4 py-1.5 rounded-lg">
                                         Buy Now
                                     </button>
                                 </div>

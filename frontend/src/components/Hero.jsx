@@ -2,6 +2,7 @@ import { useEffect, useState, useContext } from "react";
 import { ProductsContext } from "../context/ProductsContext";
 import axios from "axios";
 import { toast } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination } from "swiper/modules";
 import "swiper/css";
@@ -17,6 +18,8 @@ const truncateWords = (text, wordLimit) => {
 };
 
 export const Hero = () => {
+    const navigate = useNavigate();
+    const {getProductById} = useContext(ProductsContext);
     const { loading, setLoading } = useContext(ProductsContext);
 
     const backendUrl = import.meta.env.VITE_BACKEND_URL;
@@ -82,11 +85,12 @@ export const Hero = () => {
                                     </h2>
 
                                     <div className="flex gap-3 justify-center md:justify-start flex-wrap">
-                                        <button className="cursor-pointer px-4 py-2 bg-[#1E88E5] hover:bg-blue-700 text-white rounded-lg transition text-sm">
+                                        <button onClick={() =>{getProductById(product._id), navigate("/products/" + product._id), window.scrollTo({ top: 0, behavior: "smooth" })}}
+                                            className="cursor-pointer px-4 py-2 bg-[#1E88E5] hover:bg-blue-700 text-white rounded-lg transition text-sm">
                                             Buy Now
                                         </button>
                                         <button className="cursor-pointer px-4 py-2 bg-transparent border border-[#1E88E5] hover:bg-[#1E88E5] text-white rounded-lg transition text-sm">
-                                            See Details
+                                            Add to Cart
                                         </button>
                                     </div>
                                 </div>

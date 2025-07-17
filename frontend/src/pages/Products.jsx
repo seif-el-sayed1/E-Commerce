@@ -1,13 +1,13 @@
 import { useEffect, useContext } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { ProductsContext } from '../context/ProductsContext';
 import { assets } from "../assets/assets";
 import { FiltersPanel } from '../components/FilterPanel';
 import { Search } from '../components/Search';
 
 export const Products = () => {
-    const { products, getAllProducts, loading, totalPages, filters, setFilters } = useContext(ProductsContext);
-
+    const { products, getAllProducts, loading, totalPages, filters, setFilters, getProductById } = useContext(ProductsContext);
+    const navigate = useNavigate();
     const truncateWords = (text, wordLimit) => {
         const words = text.split(" ");
         return words.length > wordLimit ? words.slice(0, wordLimit).join(" ") + "..." : text;
@@ -103,7 +103,8 @@ export const Products = () => {
                                 </div>
                                 <div className="flex justify-between items-center">
                                     <p className="font-semibold text-white">${product.price}</p>
-                                    <button className="cursor-pointer bg-transparent border border-[#1E88E5] hover:bg-[#1E88E5] transition duration-300 text-white text-sm px-4 py-1.5 rounded-lg">
+                                    <button onClick={() =>{getProductById(product._id), navigate("/products/" + product._id), window.scrollTo({ top: 0, behavior: "smooth" })} } 
+                                        className="cursor-pointer bg-transparent border border-[#1E88E5] hover:bg-[#1E88E5] transition duration-300 text-white text-sm px-4 py-1.5 rounded-lg">
                                         Buy Now
                                     </button>
                                 </div>

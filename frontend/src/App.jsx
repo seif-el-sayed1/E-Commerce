@@ -7,6 +7,7 @@ import { Products } from "./pages/Products";
 import { Login } from "./pages/auth/Login";
 import { VerifyEmail } from "./pages/auth/VerifyEmail";
 import { ResetPassword } from "./pages/auth/ResetPassword";
+import { ProductsDetails } from "./pages/ProductsDetails";
 
 function App() {
   const location = useLocation();
@@ -38,6 +39,10 @@ function App() {
 
         <Route path="/auth/verify-email" element={
           <VerifyEmail />
+        } />
+
+        <Route path="/products/:id" element={
+          <ProductsDetails />
         } />
 
       </Routes>
