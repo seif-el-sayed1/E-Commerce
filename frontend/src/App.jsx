@@ -8,6 +8,7 @@ import { Login } from "./pages/auth/Login";
 import { VerifyEmail } from "./pages/auth/VerifyEmail";
 import { ResetPassword } from "./pages/auth/ResetPassword";
 import { ProductsDetails } from "./pages/ProductsDetails";
+import { Cart } from "./pages/Cart";
 
 function App() {
   const location = useLocation();
@@ -20,6 +21,7 @@ function App() {
         reverseOrder={false}
       />
       {!isLoginPage && <Navbar />}
+      
       <Routes>
         <Route path='/' element={
             <Home />
@@ -43,6 +45,10 @@ function App() {
 
         <Route path="/products/:id" element={
           <ProductsDetails />
+        } />
+
+        <Route path="/cart" element={
+          <Cart />
         } />
 
       </Routes>
