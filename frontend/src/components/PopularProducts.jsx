@@ -79,10 +79,15 @@ export const PopularProducts = () => {
                                     </div>
                                 </div>
                                 <div className="flex justify-between items-center">
-                                    <p className="font-semibold text-white">${product.price}</p>
+                                    <div className="flex flex-col gap-2 items-center">
+                                        <p className="font-semibold text-white">${product.finalPrice.toFixed(2)}</p>
+                                        {product.discountPercent && (
+                                            <del className="text-gray-400">${product.price.toFixed(2)}</del>
+                                        )}
+                                    </div>
                                     <button onClick={() =>{getProductById(product._id), navigate("/products/" + product._id), window.scrollTo({ top: 0, behavior: "smooth" })} } 
                                         className="cursor-pointer bg-transparent border border-[#1E88E5] hover:bg-[#1E88E5] transition duration-300 text-white text-sm px-4 py-1.5 rounded-lg">
-                                        Buy Now
+                                        See Details
                                     </button>
                                 </div>
                             </div>
