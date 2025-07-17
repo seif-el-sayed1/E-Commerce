@@ -3,10 +3,12 @@ import { useParams } from 'react-router-dom';
 import { ProductsContext } from '../context/ProductsContext';
 import { assets } from '../assets/assets';
 import { PopularProducts } from '../components/PopularProducts';
+import { CartContext } from '../context/CartContext';
 
 export const ProductsDetails = () => {
     const { id } = useParams();
     const { product, getProductById, loading } = useContext(ProductsContext);
+    const { addToCart, loading: cartLoading } = useContext(CartContext);
 
     useEffect(() => {
         getProductById(id);
@@ -45,14 +47,15 @@ export const ProductsDetails = () => {
                         <p className='text-gray-300 mb-6 leading-relaxed'>{product.description}</p>
 
                         <div className='flex items-center gap-4 mb-6'>
-                            <h3 className='text-2xl font-bold text-white'>${product.finalPrice}</h3>
-                            {product.discount &&
-                                <del className='text-gray-400'>${product.price}</del>
+                            <h3 className='text-2xl font-bold text-white'>${product.finalPrice.toFixed(2)}</h3>
+                            {product.discountPercent &&
+                                <del className='text-gray-400'>${product.price.toFixed(2)}</del>
                             }
                         </div>
 
                         <div className='flex flex-col sm:flex-row gap-4'>
-                            <button className='cursor-pointer flex-1 bg-[#1E88E5] hover:bg-[#1565C0] transition duration-300 py-3 rounded-lg text-white font-semibold'>
+                            <button  disabled={cartLoading} onClick={() => addToCart(product._id)}
+                                className={`cursor-pointer flex-1 bg-[#1E88E5] hover:bg-[#1565C0] transition duration-300 py-3 rounded-lg text-white font-semibold ${cartLoading ? 'opacity-50 cursor-not-allowed' : ''}`}>
                                 Add To Cart
                             </button>
                             <button className='cursor-pointer flex-1 border border-[#1E88E5] hover:bg-[#1E88E5] transition duration-300 py-3 rounded-lg text-white font-semibold'>
@@ -62,6 +65,7 @@ export const ProductsDetails = () => {
                     </div>
                 </div>
             </div>
+            
 
             <PopularProducts />
         </>
