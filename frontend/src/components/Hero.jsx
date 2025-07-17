@@ -1,5 +1,6 @@
 import { useEffect, useState, useContext } from "react";
 import { ProductsContext } from "../context/ProductsContext";
+import { CartContext } from "../context/CartContext";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
@@ -21,6 +22,8 @@ export const Hero = () => {
     const navigate = useNavigate();
     const {getProductById} = useContext(ProductsContext);
     const { loading, setLoading } = useContext(ProductsContext);
+
+    const { addToCart, loading: cartLoading } = useContext(CartContext);
 
     const backendUrl = import.meta.env.VITE_BACKEND_URL;
     const [heroProducts, setHeroProducts] = useState([]);
@@ -87,9 +90,10 @@ export const Hero = () => {
                                     <div className="flex gap-3 justify-center md:justify-start flex-wrap">
                                         <button onClick={() =>{getProductById(product._id), navigate("/products/" + product._id), window.scrollTo({ top: 0, behavior: "smooth" })}}
                                             className="cursor-pointer px-4 py-2 bg-[#1E88E5] hover:bg-blue-700 text-white rounded-lg transition text-sm">
-                                            Buy Now
+                                            See Details
                                         </button>
-                                        <button className="cursor-pointer px-4 py-2 bg-transparent border border-[#1E88E5] hover:bg-[#1E88E5] text-white rounded-lg transition text-sm">
+                                        <button onClick={() => addToCart(product._id)} 
+                                            className={`cursor-pointer px-4 py-2 bg-transparent border border-[#1E88E5] hover:bg-[#1E88E5] text-white rounded-lg transition text-sm ${cartLoading ? 'opacity-50 cursor-not-allowed' : ''}`}>
                                             Add to Cart
                                         </button>
                                     </div>
