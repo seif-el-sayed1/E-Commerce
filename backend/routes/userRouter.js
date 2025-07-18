@@ -5,6 +5,8 @@ const passport = require('passport');
 const userController = require('../controllers/userController')
 const verifyToken = require("../middlewares/verifyToken")
 const upload = require("../middlewares/uploadImage")
+const isUser = require("../middlewares/isUser");
+const isAdmin = require("../middlewares/isAdmin");
 
 require('../config/passport');
 
@@ -32,20 +34,20 @@ router.route('/login').post(userController.login)
 // logout
 router.route('/logout').post(userController.logout)
 //send verify otp
-router.route('/send-verify-otp').post(verifyToken, userController.sendVerifyOtp)
+router.route('/send-verify-otp').post(verifyToken, isUser, userController.sendVerifyOtp)
 //verify email
-router.route('/verify-email').post(verifyToken, userController.verifyEmail)
+router.route('/verify-email').post(verifyToken, isUser, userController.verifyEmail)
 //send reset otp
-router.route('/send-reset-otp').post(userController.sendResetOtp)
+router.route('/send-reset-otp').post(isUser, userController.sendResetOtp)
 //reset password
 router.route('/reset-password').post(userController.resetPassword)
 //update user
-router.route('/update-user').put(verifyToken, upload.single('image'), userController.updateUser)
+router.route('/update-user').put(verifyToken, isUser, upload.single('image'), userController.updateUser)
 // get user data
 router.route('/get-user').get(verifyToken, userController.userData)
 //authentication
 router.route('/is-auth').get(verifyToken, userController.isAuthenticated)
 // get all users
-router.route('/get-all-users').get(verifyToken, userController.getAllUsers)
+router.route('/get-all-users').get(verifyToken, isAdmin, userController.getAllUsers)
 
 module.exports = router;

@@ -4,12 +4,13 @@ const router = express.Router()
 const productController = require('../controllers/productController')
 const upload = require('../middlewares/uploadImage')
 const verifyToken = require('../middlewares/verifyToken')
+const isAdmin = require('../middlewares/isAdmin')
 //add product
-router.route('/add-product').post(verifyToken, upload.single('image'), productController.addProduct)
+router.route('/add-product').post(verifyToken, isAdmin, upload.single('image'), productController.addProduct)
 // update product
-router.route('/update-product/:id').put( verifyToken, upload.single('image'), productController.updateProduct)
+router.route('/update-product/:id').put( verifyToken, isAdmin, upload.single('image'), productController.updateProduct)
 // delete product
-router.route('/delete-product/:id').delete( verifyToken, productController.deleteProduct)
+router.route('/delete-product/:id').delete( verifyToken, isAdmin, productController.deleteProduct)
 // get all products
 router.route('/get-all-products').get(productController.getAllProducts)
 // get product
