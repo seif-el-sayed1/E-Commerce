@@ -45,8 +45,14 @@ export const UserContextProvider = (props) => {
                     const { data } = await axios.post(backendUrl + "/api/auth/login", { email, password });
                     if (data.success) {
                         setIsLoggedin(true);
+                        console.log(data.user.role);
                         getUserData();
-                        navigate("/");
+
+                        if ( data.user.role == "admin") {
+                            navigate("/admin");
+                        } else {
+                            navigate("/");
+                        }
                     }
                 }
             } catch (error) {
@@ -59,6 +65,7 @@ export const UserContextProvider = (props) => {
     
     const authState = async () => {
         try {
+            setLoading(true);
             const {data} = await axios.get(backendUrl + "/api/auth/is-auth")
             if(data.success) {
                 setIsLoggedin(true)

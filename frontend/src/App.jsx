@@ -9,13 +9,13 @@ import { VerifyEmail } from "./pages/auth/VerifyEmail";
 import { ResetPassword } from "./pages/auth/ResetPassword";
 import { ProductsDetails } from "./pages/ProductsDetails";
 import { Cart } from "./pages/Cart";
+import { UserRoutes } from "./utils/UserRoutes";
 
 function App() {
   const location = useLocation();
   const isLoginPage = location.pathname.includes("/auth");
   return (
     <>
-      
       <Toaster
         position="top-center"
         reverseOrder={false}
@@ -25,31 +25,34 @@ function App() {
       <Routes>
         <Route path='/' element={
             <Home />
-        } /> 
-
-        <Route path='/products' element={
-          <Products />
         } />
-
+          
         <Route path="/auth" element={
           <Login />
         } />
 
-        <Route path="/auth/reset-password" element={
-          <ResetPassword />
-        } />
-
-        <Route path="/auth/verify-email" element={
-          <VerifyEmail />
+        <Route path='/products' element={
+          <Products />
         } />
 
         <Route path="/products/:id" element={
           <ProductsDetails />
         } />
 
-        <Route path="/cart" element={
-          <Cart />
-        } />
+        <Route element={<UserRoutes />}>
+
+          <Route path="/auth/reset-password" element={
+            <ResetPassword />
+          } />
+
+          <Route path="/auth/verify-email" element={
+            <VerifyEmail />
+          } />
+
+          <Route path="/cart" element={
+            <Cart />
+          } />
+        </Route>
 
       </Routes>
       {!isLoginPage && <Footer />}
