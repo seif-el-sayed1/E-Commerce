@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { ProductsContext } from "../context/ProductsContext";
 
 export const Search = () => {
     const truncateWords = (text, wordLimit) => {
@@ -15,6 +16,8 @@ export const Search = () => {
     const [searchProducts, setSearchProducts] = useState([]);
     const [showResults, setShowResults] = useState(false);
     const [loading, setLoading] = useState(false);
+
+    const { getProductById } = useContext(ProductsContext);
 
     const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
@@ -78,7 +81,7 @@ export const Search = () => {
                                 key={product._id}
                                 to={`/products/${product._id}`}
                                 className="block px-4 py-3 hover:bg-[#37474F] text-white border-b border-gray-600 transition"
-                                onClick={() => setShowResults(false)}
+                                onClick={() => {setShowResults(false), getProductById(product._id)}}
                             >
                                 <div className="flex gap-4 items-center">
                                     <img src={product.image} alt={product.title} className="w-16 h-16 object-contain" />
