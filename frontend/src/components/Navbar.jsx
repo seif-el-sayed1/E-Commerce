@@ -1,7 +1,6 @@
-import React, { useState, useContext } from 'react'
+import { useState, useContext } from 'react'
 import { Link } from 'react-router-dom'
 import { UserContext } from '../context/UserContext'
-import { CartContext } from '../context/CartContext'
 import { assets } from '../assets/assets'
 
 export const Navbar = () => {
