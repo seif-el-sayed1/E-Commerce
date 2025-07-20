@@ -10,17 +10,21 @@ import { ResetPassword } from "./pages/auth/ResetPassword";
 import { ProductsDetails } from "./pages/ProductsDetails";
 import { Cart } from "./pages/Cart";
 import { UserRoutes } from "./utils/UserRoutes";
+import { Sidebar } from "./components/admin/Sidebar";
+import { Dashboard } from "./pages/admin/Dashboard";
+import { AddProduct } from "./pages/admin/AddProduct";
 
 function App() {
   const location = useLocation();
   const isLoginPage = location.pathname.includes("/auth");
+  const isAdminPage = location.pathname.includes("/admin");
   return (
     <>
       <Toaster
         position="top-center"
         reverseOrder={false}
       />
-      {!isLoginPage && <Navbar />}
+      {!isLoginPage && !isAdminPage && <Navbar />}
       
       <Routes>
         <Route path='/' element={
@@ -53,9 +57,23 @@ function App() {
             <Cart />
           } />
         </Route>
+        
+        <Route path="/admin" element={
+          <div className="flex">
+            <Sidebar />
+            <Dashboard />
+          </div>
+        } />
+
+        <Route path="/admin/add-product" element={
+          <div className="flex">
+            <Sidebar />
+            <AddProduct />
+          </div>
+        } />
 
       </Routes>
-      {!isLoginPage && <Footer />}
+      {!isLoginPage && !isAdminPage && <Footer />}
     </>
   )
 }

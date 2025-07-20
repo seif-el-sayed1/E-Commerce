@@ -7,7 +7,7 @@ export const ProductsContext = createContext();
 export const ProductsContextProvider = (props) => {
     axios.defaults.withCredentials = true
     const backendUrl = import.meta.env.VITE_BACKEND_URL; 
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
 
     const [products, setProducts] = useState([]);
     
@@ -25,6 +25,7 @@ export const ProductsContextProvider = (props) => {
 
     const addProduct = async (formData) => {
         try {
+            setLoading(true);
             const { data } = await axios.post(backendUrl + "/api/product/add-product",
                 formData,
                 {
