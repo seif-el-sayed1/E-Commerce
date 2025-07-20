@@ -1,5 +1,7 @@
-const isAdmin = (req, res, next) => {
-    if (req.user && req.user.role === "admin") {
+const userModel = require('../models/userModel');
+const isAdmin = async (req, res, next) => {
+    const user = await userModel.findById(req.user.id);
+    if (user && user.role === "admin") {
         next();
     } else {
         return res.status(403).json({ success: false, message: "Access denied" });

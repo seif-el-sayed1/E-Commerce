@@ -5,6 +5,7 @@ const transporter = require("../config/nodemailer")
 const users = require("../models/userModel")
 const {EMAIL_VERIFY_TEMPLATE, PASSWORD_RESET_TEMPLATE} = require("../config/emailTemplates")
 const cloudinary = require('cloudinary').v2;
+const userModel = require('../models/userModel');
 
 const register = async (req, res) => {
     const {name, email, password} = req.body
@@ -268,18 +269,13 @@ const isAuthenticated = async (req, res) => {
 
 const getAllUsers = async (req, res) => {
     try {
-        if(req.user.role !== "admin") {
-            return res.status(401).json({success: false, message: "Unauthorized"})
-        }
-        const {page = 1, limit = 5} = req.query
-
         
+        const {page = 1, limit = 5} = req.query
         const skip = (Number(page) - 1) * Number(limit);
-
         const allUsers = await users.find({role: "user"})
                                     .skip(skip)
                                     .limit(Number(limit))
-                                    .select("-password -isVerified -verifyOtp -verifyOtpExpired -resetOtp -resetOtpExpired -signUpWay -__v -createdAt -updatedAt")
+                                    .select("-password -imagePublicId -isVerified -verifyOtp -verifyOtpExpired -resetOtp -resetOtpExpired -signUpWay -__v -createdAt -updatedAt")
                                     .sort({createdAt: -1})
 
         const totalUsers = await users.countDocuments({role: "user"})
