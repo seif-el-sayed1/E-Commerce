@@ -15,6 +15,8 @@ export const UserContextProvider = (props) => {
     const [userData, setUserData] = useState({});
     const [isAdmin, setIsAdmin] = useState(false)
 
+    const [allUsers, setAllUsers] = useState([]);
+
     const [state, setState] = useState("login");
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
@@ -126,6 +128,22 @@ export const UserContextProvider = (props) => {
         }
     };
 
+    const getAllUsers = async () => {
+        try {
+            const { data } = await axios.get(backendUrl + "/api/auth/get-all-users");
+            if (data.success) { 
+                setAllUsers({allUsers: data.allUsers,
+                            totalUsers: data.totalUsers,
+                });
+            } else {
+                toast.error(data.message, { position: "top-center" });
+            }
+        } catch (error) {
+            const message = error.response?.data?.message || error.message || "Something went wrong";
+            toast.error(message, { position: "top-center" });
+        }
+    }
+
     const value = {
         login,
         state,
@@ -149,7 +167,9 @@ export const UserContextProvider = (props) => {
         isAdmin,
         setIsAdmin,
         logout,
-        sentVerifyOtp
+        sentVerifyOtp,
+        getAllUsers,
+        allUsers,
     };
 
     useEffect(() => {
