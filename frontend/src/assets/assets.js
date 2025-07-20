@@ -8,7 +8,7 @@ import playstation from "./playstation.png"
 import soundbox from "./soundbox.png"
 import google from "./google.svg"
 import upload from "./upload.png"
-
+import dashboard from "./dashboard.svg"
 
 export const  assets ={
     avatar,
@@ -20,5 +20,6 @@ export const  assets ={
     playstation,
     soundbox,
     google,
-    upload
+    upload,
+    dashboard
 }
