@@ -104,7 +104,7 @@ export const Products = () => {
                                 <div className="flex justify-between items-center">
                                     <div className="flex flex-col  items-center">
                                         <p className="font-semibold text-white">${product.finalPrice.toFixed(2)}</p>
-                                        {product.discountPercent && (
+                                        {product.discountPercent > 0 && (
                                             <del className="text-gray-400">${product.price.toFixed(2)}</del>
                                         )}
                                     </div>
