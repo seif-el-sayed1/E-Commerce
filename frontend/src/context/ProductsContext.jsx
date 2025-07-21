@@ -9,7 +9,11 @@ export const ProductsContextProvider = (props) => {
     const backendUrl = import.meta.env.VITE_BACKEND_URL; 
     const [loading, setLoading] = useState(false);
 
-    const [products, setProducts] = useState([]);
+    const [allProducts, setAllProducts] = useState({
+        products: [],
+        totalProducts: 0
+    });
+
     
     const [product, setProduct] = useState({});
 
@@ -48,6 +52,7 @@ export const ProductsContextProvider = (props) => {
 
     const updateProduct = async (id, formData) => {
         try {
+            setLoading(true);
             const { data } = await axios.put(`${backendUrl}/api/product/update-product/${id}`,
                 formData,
                 {
@@ -69,8 +74,14 @@ export const ProductsContextProvider = (props) => {
 
     const deleteProduct = async (id) => {
         try {
-            const { data } = await axios.delete(`${backendUrl}/api/product/delete-product/${id}`)
+            setLoading(true);
+            const { data } = await axios.delete(`${backendUrl}/api/product/delete-product`, {
+                data: {
+                    id
+                }
+            })
             if (data.success) {
+                setProducts(products.filter((product) => product._id !== id));
                 toast.success(data.message, { position: "top-center" });
             }
         } catch (error) {
@@ -96,7 +107,10 @@ export const ProductsContextProvider = (props) => {
             });
 
             if (data.success) {
-                setProducts(data.products);
+                setAllProducts({
+                    products: data.products,
+                    totalProducts: data.totalProducts
+                });
                 
                 setTotalPages(data.totalPages);
             } 
@@ -107,7 +121,6 @@ export const ProductsContextProvider = (props) => {
             setLoading(false);
         }
     };
-
 
     const getProductById = async (id) => {
         try {
@@ -132,7 +145,7 @@ export const ProductsContextProvider = (props) => {
         updateProduct,
         deleteProduct,
         getAllProducts,
-        products,
+        allProducts,
         totalPages,
         setTotalPages,
         filters,
