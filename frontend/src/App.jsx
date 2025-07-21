@@ -13,6 +13,9 @@ import { UserRoutes } from "./utils/UserRoutes";
 import { Sidebar } from "./components/admin/Sidebar";
 import { Dashboard } from "./pages/admin/Dashboard";
 import { AddProduct } from "./pages/admin/AddProduct";
+import { ListProducts } from "./pages/admin/ListProducts";
+import { UpdateProduct } from "./pages/admin/UpdateProduct";
+import { AllUsers } from "./pages/admin/AllUsers";
 
 function App() {
   const location = useLocation();
@@ -71,6 +74,27 @@ function App() {
             <AddProduct />
           </div>
         } />
+
+        <Route path="/admin/list-products" element={
+          <div className="flex ">
+            <Sidebar />
+            <ListProducts />
+          </div>
+        }
+        />
+        <Route path="/admin/update/:id" element={
+          <div className="flex">
+            <Sidebar />
+            <UpdateProduct />
+          </div>
+        } />
+
+        <Route path="/admin/users" element={
+          <div className="flex">  
+            <Sidebar />
+            <AllUsers />
+          </div>
+        } /> 
 
       </Routes>
       {!isLoginPage && !isAdminPage && <Footer />}
