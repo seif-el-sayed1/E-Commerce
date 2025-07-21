@@ -15,7 +15,10 @@ export const UserContextProvider = (props) => {
     const [userData, setUserData] = useState({});
     const [isAdmin, setIsAdmin] = useState(false)
 
-    const [allUsers, setAllUsers] = useState([]);
+    const [allUsers, setAllUsers] = useState({
+        users: [],
+        totalUsers: 0
+    });
 
     const [state, setState] = useState("login");
     const [name, setName] = useState("");
@@ -132,7 +135,7 @@ export const UserContextProvider = (props) => {
         try {
             const { data } = await axios.get(backendUrl + "/api/auth/get-all-users");
             if (data.success) { 
-                setAllUsers({allUsers: data.allUsers,
+                setAllUsers({users: data.allUsers,
                             totalUsers: data.totalUsers,
                 });
             } else {
