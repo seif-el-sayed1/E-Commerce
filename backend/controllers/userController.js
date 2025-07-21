@@ -272,7 +272,7 @@ const getAllUsers = async (req, res) => {
         
         const {page = 1, limit = 5} = req.query
         const skip = (Number(page) - 1) * Number(limit);
-        const allUsers = await users.find({role: "user"})
+        const allUsers = await users.find()
                                     .skip(skip)
                                     .limit(Number(limit))
                                     .select("-password -imagePublicId -isVerified -verifyOtp -verifyOtpExpired -resetOtp -resetOtpExpired -signUpWay -__v -createdAt -updatedAt")
