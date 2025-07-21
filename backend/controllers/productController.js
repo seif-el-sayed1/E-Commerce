@@ -53,20 +53,13 @@ const addProduct = async (req, res) => {
 const updateProduct = async (req, res) => {
     const { newTitle, newDescription, newPrice, newDiscountPercent, newCategory, newStock } = req.body;
 
-    const user = await users.findById(req.user.id);
-    if (user.role !== "admin") {
-        return res.status(401).json({ success: false, message: "Unauthorized" });
-    }
-
     try {
         const product = await productModel.findById(req.params.id);
 
         if (!product) {
             return res.status(404).json({ success: false, message: "Product not found" });
         }
-        if (newPrice <= 0 || newStock < 0 || newDiscountPercent < 0) {
-            return res.status(400).json({ success: false, message: "Invalid numerical values" });
-        }
+        
 
         const existProduct = await productModel.findOne({ title: newTitle });
         if (existProduct && existProduct._id.toString() !== req.params.id) {
@@ -105,12 +98,9 @@ const updateProduct = async (req, res) => {
 };
 
 const deleteProduct = async (req, res) => {
+    const { id } = req.body
     try {
-        const product = await productModel.findById(req.params.id);
-
-        if (req.user.role !== "admin") {
-            return res.status(401).json({ success: false, message: "Unauthorized" });
-        }
+        const product = await productModel.findById(id);
 
         if (!product) {
             return res.status(404).json({ success: false, message: "Product not found" });
