@@ -6,7 +6,7 @@ import { FiltersPanel } from '../components/FilterPanel';
 import { Search } from '../components/Search';
 
 export const Products = () => {
-    const { products, getAllProducts, loading, totalPages, filters, setFilters, getProductById } = useContext(ProductsContext);
+    const { allProducts, getAllProducts, loading, totalPages, filters, setFilters, getProductById } = useContext(ProductsContext);
     const navigate = useNavigate();
     const truncateWords = (text, wordLimit) => {
         const words = text.split(" ");
@@ -79,7 +79,7 @@ export const Products = () => {
             ) : (
                 <>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {products.map(product => (
+                        {allProducts.products.map(product => (
                             <div key={product._id} className="bg-[#263238] border border-[#1E88E5] rounded-xl overflow-hidden p-5 transition duration-300 hover:shadow-lg hover:scale-[1.01]">
                                 <div className="h-[180px] flex justify-center items-center bg-[#37474F] rounded-lg mb-4 overflow-hidden">
                                     <img
