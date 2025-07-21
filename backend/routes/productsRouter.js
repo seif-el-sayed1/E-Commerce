@@ -10,7 +10,7 @@ router.route('/add-product').post(verifyToken, isAdmin, upload.single('image'), 
 // update product
 router.route('/update-product/:id').put( verifyToken, isAdmin, upload.single('image'), productController.updateProduct)
 // delete product
-router.route('/delete-product/:id').delete( verifyToken, isAdmin, productController.deleteProduct)
+router.route('/delete-product').delete( verifyToken, isAdmin, productController.deleteProduct)
 // get all products
 router.route('/get-all-products').get(productController.getAllProducts)
 // get product
