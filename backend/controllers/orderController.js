@@ -93,17 +93,11 @@ const getUserOrders = async (req, res) => {
 
 const getAllOrders = async (req, res) => {
     try {
-        
-        if (req.user.role !== "admin") {
-            return res.status(401).json({ success: false, message: "Unauthorized" });
-        }
-
+    
         const {page = 1, limit = 5} = req.query
         const skip = (Number(page) - 1) * Number(limit);
 
-        const totalOrders = orders.length;
-        const totalPages = Math.ceil(totalOrders / Number(limit));
-        const totalProfit = orders.reduce((acc, order) => acc + order.totalPrice, 0);
+        
 
         const orders = await orderModel.find()
             .skip(skip)
@@ -121,7 +115,10 @@ const getAllOrders = async (req, res) => {
         if (!orders || orders.length === 0) {
             return res.status(404).json({ success: false, message: "No orders found" });
         }
-        
+        const totalOrders = orders.length;
+        const totalPages = Math.ceil(totalOrders / Number(limit));
+        const totalProfit = orders.reduce((acc, order) => acc + order.totalPrice, 0);
+
         return res.status(200).json({ success: true, orders, totalOrders, totalProfit, totalPages });
     } catch (error) {
         return res.status(500).json({ success: false, message: error.message });
