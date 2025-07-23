@@ -21,6 +21,7 @@ export const Navbar = () => {
             <div className='hidden sm:flex gap-5 text-sm font-medium'> 
                 <Link to="/" className="hover:text-[#64B5F6] transition">Home</Link>
                 <Link to="/products" className="hover:text-[#64B5F6] transition">Products</Link>
+                <Link to="/my-orders" className="hover:text-[#64B5F6] transition">Orders</Link>
                 <Link to="#" className="hover:text-[#64B5F6] transition">About</Link>
                 <Link to="#" className="hover:text-[#64B5F6] transition">Contact</Link>
             </div>
@@ -41,7 +42,6 @@ export const Navbar = () => {
                         {menu && (
                             <div className="absolute top-16 right-6 w-52 bg-white text-gray-800 shadow-xl rounded-lg border border-gray-300 z-50">
                                 <p className="text-sm font-bold text-gray-500 border-b px-4 py-2">{userData.email}</p>
-
                                 <button className="w-full text-left px-4 py-2 hover:bg-gray-100 flex items-center gap-2">
                                     <img className="w-4 invert" src={assets.userIcon} alt="Edit Profile" />
                                     Edit Profile
@@ -90,6 +90,7 @@ export const Navbar = () => {
             <div className={`${open ? 'flex' : 'hidden'} absolute top-[64px] left-0 w-full h-[calc(100vh-64px)] bg-[#0D1117] shadow-md flex-col justify-center items-center gap-6 text-base sm:hidden z-50`}>
                 <Link to="/" onClick={() => setOpen(false)} className="text-white hover:text-[#1E88E5] transition text-lg">Home</Link>
                 <Link to="/products" onClick={() => setOpen(false)} className="text-white hover:text-[#1E88E5] transition text-lg">Products</Link>
+                <Link to="/my-orders"  onClick={() => setOpen(false)} className="text-white hover:text-[#1E88E5] transition text-lg">orders</Link>
                 <Link to="#" onClick={() => setOpen(false)} className="text-white hover:text-[#1E88E5] transition text-lg">About</Link>
                 <Link to="#" onClick={() => setOpen(false)} className="text-white hover:text-[#1E88E5] transition text-lg">Contact</Link>
                 {isLoggedin ? (
