@@ -16,6 +16,7 @@ import { AddProduct } from "./pages/admin/AddProduct";
 import { ListProducts } from "./pages/admin/ListProducts";
 import { UpdateProduct } from "./pages/admin/UpdateProduct";
 import { AllUsers } from "./pages/admin/AllUsers";
+import { MyOrders } from "./pages/MyOrders";
 
 function App() {
   const location = useLocation();
@@ -58,6 +59,10 @@ function App() {
 
           <Route path="/cart" element={
             <Cart />
+          } />
+
+          <Route path="/my-orders" element={
+            <MyOrders /> 
           } />
         </Route>
         
