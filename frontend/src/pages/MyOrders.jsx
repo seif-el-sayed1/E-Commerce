@@ -11,7 +11,7 @@ export const MyOrders = () => {
 
     if (loading) {
         return (
-            <div className="flex items-center justify-center min-h-screen bg-black/50">
+            <div className="flex items-center justify-center w-full min-h-screen bg-black/50">
                 <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
             </div>
         );
@@ -19,9 +19,8 @@ export const MyOrders = () => {
 
     return (
         <>
-            <div className="bg-[#1a1a1a] min-h-screen px-6 md:px-16 lg:px-24 xl:px-32 py-10 text-white">
+            <div className="bg-[#1a1a1a] min-h-screen w-full px-6 md:px-16 lg:px-24 xl:px-32 py-10 text-white">
                 <h2 className="text-3xl font-bold mb-8 text-[#1E88E5]">Your Orders</h2>
-
                 {!orders.orders || orders.orders.length === 0 ? (
                     <p className="text-gray-400 text-lg text-center">You have no orders yet.</p>
                 ) : (
@@ -33,9 +32,20 @@ export const MyOrders = () => {
                             >
                                 <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-2">
                                     <div>
-                                        <p className="text-sm text-gray-400 mb-1">Order ID: <span className="text-white">{order._id}</span></p>
                                         <p className="text-sm text-gray-400 mb-1">Date: <span className="text-white">{new Date(order.date).toLocaleDateString()}</span></p>
-                                        <p className="text-sm text-gray-400 mb-1">Order Status: <span className={`${order.orderStatus === 'delivered' ? 'text-green-500' : 'text-red-500'}`}>{order.orderStatus}</span></p>
+                                        <p className="text-sm text-gray-400 mb-1">
+                                            Order Status:
+                                            <span className={`ml-1 font-semibold ${
+                                                order.orderStatus === 'pending' ? 'text-yellow-400' :
+                                                order.orderStatus === 'shipped' ? 'text-blue-400' :
+                                                order.orderStatus === 'out-for-delivery' ? 'text-purple-400' :
+                                                order.orderStatus === 'delivered' ? 'text-green-500' :
+                                                order.orderStatus === 'cancelled' ? 'text-red-500' :
+                                                'text-white'
+                                            }`}>
+                                                {order.orderStatus}
+                                            </span>
+                                        </p>
                                         <p className="text-sm text-gray-400 mb-1">Payment: <span className={`${order.paymentStatus === 'paid' ? 'text-green-500' : 'text-red-500'}`}>{order.paymentStatus}</span></p>
                                         <p className="text-sm text-gray-400 mb-1">Address: <span className="text-white">{order.address}</span></p>
                                         <p className="text-sm text-gray-400 mb-1">Phone: <span className="text-white">{order.phone}</span></p>
