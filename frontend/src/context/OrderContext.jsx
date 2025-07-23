@@ -8,7 +8,18 @@ export const OrderContextProvider = (props) => {
     const backendUrl = import.meta.env.VITE_BACKEND_URL
     const [loading, setLoading] = useState(false);
     
-    
+    const [orders, setOrders] = useState({
+        orders: [],
+        totalOrders: 0,
+        totalProfit: 0,
+        totalPages: 0
+    });
+
+    const [allOrders, setAllOrders] = useState({
+        orders: [],
+        totalOrders: 0,
+        totalProfit: 0,
+    });
 
     const submitOrder = async (address, phone) => {
         try {
@@ -41,12 +52,6 @@ export const OrderContextProvider = (props) => {
         }
     }
 
-    const [orders, setOrders] = useState({
-        orders: [],
-        totalOrders: 0,
-        totalProfit: 0,
-        totalPages: 0
-    });
     const getUserOrder = async () => {
         try {
             setLoading(true);
@@ -72,7 +77,12 @@ export const OrderContextProvider = (props) => {
             setLoading(true);
             const { data } = await axios.get(`${backendUrl}/api/order/get-all-orders`);
             if (data.success) {
-                setOrder()
+                setAllOrders({
+                    orders: data.orders,
+                    totalOrders: data.totalOrders,
+                    totalProfit: data.totalProfit,
+                    totalPages: data.totalPages
+                });
             }
         } catch (error) {
             const message = error.response?.data?.message || error.message || "Something went wrong";
@@ -84,9 +94,10 @@ export const OrderContextProvider = (props) => {
 
     const updateOrderStatus = async (orderId, orderStatus) => {
         try {
+            
             const { data } = await axios.put(`${backendUrl}/api/order/update-order-status`, { orderId, orderStatus });
             if (data.success) {
-                toast.success(data.message, { position: "top-center" });
+                setAllOrders((prev) => ({ ...prev, orders: prev.orders.map((order) => order._id === orderId ? { ...order, orderStatus } : order) }));
             }
         } catch (error) {
             const message = error.response?.data?.message || error.message || "Something went wrong";
@@ -94,14 +105,12 @@ export const OrderContextProvider = (props) => {
         }
     }
 
-
-
-
     const value ={
         submitOrder,
         cancelOrder,
         getUserOrder,
         getAllOrders,
+        allOrders,
         updateOrderStatus,
         loading,
         orders
