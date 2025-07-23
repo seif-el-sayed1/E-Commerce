@@ -53,24 +53,17 @@ const cancelOrder = async (req, res) => {
         if (!order) {
             return res.status(404).json({ success: false, message: "Order not found" });
         }
-
-        if (order.orderStatus !== "pending") {
+        
+        if (order.paymentMethod === "cod" && order.orderStatus === "pending") {
+            
+            await order.deleteOne({_id: orderId});
+            return res.status(200).json({ success: true, message: "Order cancelled successfully" });
+        } else {
             return res.status(400).json({
                 success: false,
                 message: `Order status is ${order.orderStatus}. Cancellation not allowed at the moment.`
             });
         }
-
-        if (order.paymentMethod === "cod") {
-            order.orderStatus = "cancelled";
-            await order.save();
-            return res.status(200).json({ success: true, message: "Order cancelled successfully" });
-        }
-
-        return res.status(400).json({
-            success: false,
-            message: "You are paid for this order. Cancellation not allowed at the moment."
-        });
 
     } catch (error) {
         return res.status(500).json({ success: false, message: error.message });
@@ -85,7 +78,7 @@ const getUserOrders = async (req, res) => {
                 path: "products.productDetails",
                 select: "image title price"
             })
-            .sort({ createdAt: 1 });
+            .sort({ createdAt: -1 });
 
         if (!orders || orders.length === 0) {
             return res.status(404).json({ success: false, message: "No orders found" });
