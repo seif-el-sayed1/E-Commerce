@@ -74,9 +74,9 @@ export const UserContextProvider = (props) => {
             const {data} = await axios.get(backendUrl + "/api/auth/is-auth")
             if(data.success) {
                 setIsLoggedin(true)
-                getUserData()
+                await getUserData()
             } else {
-                setUserData(false)
+                setUserData({})
             }
         } catch (error) {
             const message = error.response?.data?.message || error.message || "Something went wrong";
