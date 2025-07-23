@@ -37,11 +37,14 @@ export const OrderContextProvider = (props) => {
     }
 
     const cancelOrder = async (orderId) => {
+        const confirmed = window.confirm("Are you sure you want to cancel this order?");
+        if (!confirmed) return;   
         try {
             setLoading(true);
             const { data } = await axios.post(`${backendUrl}/api/order/cancel-order`, { orderId });
             if (data.success) {
-                toast.success(data.message, { position: "top-center" });
+                setOrders((prev) => ({ ...prev, orders: prev.orders.filter((order) => order._id !== orderId) }));
+                
             }
             
         } catch (error) {

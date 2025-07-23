@@ -3,7 +3,7 @@ import { OrderContext } from '../context/OrderContext';
 import { PopularProducts } from '../components/PopularProducts';
 
 export const MyOrders = () => {
-    const { orders, getUserOrder, loading, stripePayment } = useContext(OrderContext);
+    const { orders, getUserOrder, loading, stripePayment, cancelOrder } = useContext(OrderContext);
 
     useEffect(() => {
         getUserOrder();
@@ -62,6 +62,11 @@ export const MyOrders = () => {
                                         <span className={`${order.isPaid ? "block" : "hidden"} text-green-500 text-center`}>
                                             Paid
                                         </span>
+                                        <button onClick={() => cancelOrder(order._id)}
+                                            className={`${order.isPaid || order.orderStatus !== 'pending' ? "hidden" : "block"} cursor-pointer bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-500/80 transition`}
+                                        >
+                                            Cancel
+                                        </button>
 
                                     </div>
                                 </div>
