@@ -50,8 +50,7 @@ export const UserContextProvider = (props) => {
                     const { data } = await axios.post(backendUrl + "/api/auth/login", { email, password });
                     if (data.success) {
                         setIsLoggedin(true);
-                        console.log(data.user.role);
-                        getUserData();
+                        await getUserData();
 
                         if ( data.user.role == "admin") {
                             navigate("/admin");
