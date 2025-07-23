@@ -47,8 +47,8 @@ export const ProductsDetails = () => {
                         <p className='text-gray-300 mb-6 leading-relaxed'>{product.description}</p>
 
                         <div className='flex items-center gap-4 mb-6'>
-                            <h3 className='text-2xl font-bold text-white'>${product.finalPrice.toFixed(2)}</h3>
-                            {product.discountPercent &&
+                            <h3 className='text-2xl font-bold text-white'>${product.price && product.quantity ? product.finalPrice.toFixed(2) : product.price}</h3>
+                            {product.discountPercent > 0 &&
                                 <del className='text-gray-400'>${product.price.toFixed(2)}</del>
                             }
                         </div>
