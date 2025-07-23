@@ -1,5 +1,9 @@
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 const orderModel = require("../models/orderModel");
+const userModel = require("../models/userModel");
 const cartModel = require("../models/cartModel");
+
+
 
 const submitOrder = async (req, res) => {
     const { address, phone } = req.body;
@@ -7,6 +11,9 @@ const submitOrder = async (req, res) => {
     try {
         const cart = await cartModel.findOne({ userId: req.user.id }).populate("products.productDetails");
 
+        if (!address || !phone) {
+            return res.status(400).json({ success: false, message: "Address and phone number are required" });
+        }
         if (!cart || cart.products.length === 0) {
             return res.status(404).json({ success: false, message: "Cart is empty" });
         }
@@ -78,7 +85,7 @@ const getUserOrders = async (req, res) => {
                 path: "products.productDetails",
                 select: "image title price"
             })
-            .sort({ createdAt: -1 });
+            .sort({ createdAt: 1 });
 
         if (!orders || orders.length === 0) {
             return res.status(404).json({ success: false, message: "No orders found" });
@@ -105,13 +112,13 @@ const getAllOrders = async (req, res) => {
             .select("-__v -createdAt -updatedAt")
             .populate({
                 path: "products.productDetails",
-                select: "title price"
+                select: "title price image"
             }) 
             .populate({
                 path: "userId",
                 select: "name email" 
             })
-            .sort({ createdAt: -1 });
+            .sort({ createdAt: 1 });
         if (!orders || orders.length === 0) {
             return res.status(404).json({ success: false, message: "No orders found" });
         }
@@ -144,11 +151,53 @@ const updateOrderStatus = async (req, res) => {
     }
 };
 
+const stripePayment = async (req, res) => {
+    const { orderId } = req.body
+
+    try {
+        const order = await orderModel.findById(orderId)
+        const user = await userModel.findById(req.user.id)
+
+        if (!order) {
+            return res.json({ success: false, message: "Order not found" })
+        }
+
+        const session = await stripe.checkout.sessions.create({
+            payment_method_types: ['card'],
+            line_items: [
+                {
+                    price_data: {
+                        currency: "usd",
+                        product_data: {
+                            name: `Order by ${user.name}`,
+                        },
+                        unit_amount: order.totalPrice * 100,
+                    },
+                    quantity: 1
+                }
+            ],
+            mode: 'payment',
+            customer_email: user.email,
+            success_url: `${process.env.CLIENT_URL}/my-orders`,
+            cancel_url: `${process.env.CLIENT_URL}/payment-cancel`,
+            metadata: {
+                orderId: order._id.toString(),
+                userId: req.user.id.toString(),
+            }
+        })
+
+        return res.json({ success: true, url: session.url })
+
+    } catch (error) {
+        return res.status(500).json({ success: false, message: error.message })
+    }
+}
 
 module.exports = {
     submitOrder,
     getUserOrders,
     cancelOrder,
     getAllOrders,
-    updateOrderStatus
+    updateOrderStatus,
+    stripePayment
 };

@@ -5,22 +5,25 @@ const connectDB = require("./config/connectDB");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const passport = require('./config/passport');
-
 const connectCloudinary = require('./config/cloudinary');
+
 const userRouter = require("./routes/userRouter");
 const productRouter = require("./routes/productsRouter");
 const cartRouter = require("./routes/cartRouter");
 const wishlistRouter = require("./routes/wishListRouter");
 const orderRouter = require("./routes/orderRouter");
+const stripeWebhooks = require("./controllers/stripeWebhooks");
+
+app.post("/api/stripe", express.raw({ type: "application/json" }), stripeWebhooks);
 
 connectDB();
-
 connectCloudinary();
 
 app.use(cors({
     origin: "http://localhost:5173",
     credentials: true
 }));
+
 app.use(cookieParser());
 app.use(express.json());
 app.use(passport.initialize());
