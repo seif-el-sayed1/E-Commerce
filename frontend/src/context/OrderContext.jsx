@@ -105,13 +105,27 @@ export const OrderContextProvider = (props) => {
         }
     }
 
+    const stripePayment = async (orderId) => {
+        try {
+            const { data } = await axios.post(`${backendUrl}/api/order/stripe-payment`, { orderId });
+            if (data.success) {
+                window.location.assign(data.url);
+            } else {
+                toast.error(data.message);
+            }
+        } catch (error) {
+            toast.error(error.message);
+        }
+    };
+
     const value ={
         submitOrder,
         cancelOrder,
         getUserOrder,
         getAllOrders,
         allOrders,
-        updateOrderStatus,
+        updateOrderStatus,        
+        stripePayment,
         loading,
         orders
     }

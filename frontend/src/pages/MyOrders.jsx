@@ -3,11 +3,12 @@ import { OrderContext } from '../context/OrderContext';
 import { PopularProducts } from '../components/PopularProducts';
 
 export const MyOrders = () => {
-    const { orders, getUserOrder, loading } = useContext(OrderContext);
+    const { orders, getUserOrder, loading, stripePayment } = useContext(OrderContext);
 
     useEffect(() => {
         getUserOrder();
     }, []);
+
 
     if (loading) {
         return (
@@ -46,18 +47,22 @@ export const MyOrders = () => {
                                                 {order.orderStatus}
                                             </span>
                                         </p>
-                                        <p className="text-sm text-gray-400 mb-1">Payment: <span className={`${order.paymentStatus === 'paid' ? 'text-green-500' : 'text-red-500'}`}>{order.paymentStatus}</span></p>
+                                        <p className="text-sm text-gray-400 mb-1">Payment: <span className={`font-semibold ${order.isPaid ? 'text-green-500' : 'text-red-500'}`}>{order.paymentStatus}</span></p>
                                         <p className="text-sm text-gray-400 mb-1">Address: <span className="text-white">{order.address}</span></p>
                                         <p className="text-sm text-gray-400 mb-1">Phone: <span className="text-white">{order.phone}</span></p>
                                     </div>
 
                                     <div className='flex flex-col gap-2'>
                                         <p className="text-xl font-bold text-[#1E88E5]">Total: ${order.totalPrice.toFixed(2)}</p>
-                                        <button
-                                            className='cursor-pointer bg-[#1E88E5] text-white py-2 px-4 rounded-md hover:bg-[#1E88E5]/80 transition'
-                                            >Pay Now
-                                            
+                                        <button onClick={() => stripePayment(order._id)}
+                                            className={`${order.isPaid ? "hidden" : "block"} cursor-pointer bg-[#1E88E5] text-white py-2 px-4 rounded-md hover:bg-[#1E88E5]/80 transition`}
+                                        >
+                                            Pay Now
                                         </button>
+                                        <span className={`${order.isPaid ? "block" : "hidden"} text-green-500 text-center`}>
+                                            Paid
+                                        </span>
+
                                     </div>
                                 </div>
 
