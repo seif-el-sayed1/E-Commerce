@@ -6,6 +6,7 @@ import App from './App.jsx'
 import { UserContextProvider } from "./context/UserContext.jsx";
 import { ProductsContextProvider } from "./context/ProductsContext.jsx";
 import { CartContextProvider } from "./context/CartContext.jsx";
+import {OrderContextProvider} from "./context/OrderContext.jsx";
 
 
 createRoot(document.getElementById('root')).render(
@@ -14,7 +15,9 @@ createRoot(document.getElementById('root')).render(
       <UserContextProvider>
         <ProductsContextProvider>
           <CartContextProvider>
-            <App />
+            <OrderContextProvider>
+              <App />
+            </OrderContextProvider>
           </CartContextProvider>
         </ProductsContextProvider>
       </UserContextProvider>
