@@ -10,6 +10,7 @@ import { ResetPassword } from "./pages/auth/ResetPassword";
 import { ProductsDetails } from "./pages/ProductsDetails";
 import { Cart } from "./pages/Cart";
 import { UserRoutes } from "./utils/UserRoutes";
+import { AdminRoutes } from "./utils/AdminRoutes";
 import { Sidebar } from "./components/admin/Sidebar";
 import { Dashboard } from "./pages/admin/Dashboard";
 import { AddProduct } from "./pages/admin/AddProduct";
@@ -17,6 +18,7 @@ import { ListProducts } from "./pages/admin/ListProducts";
 import { UpdateProduct } from "./pages/admin/UpdateProduct";
 import { AllUsers } from "./pages/admin/AllUsers";
 import { MyOrders } from "./pages/MyOrders";
+import { AllOrders } from "./pages/admin/AllOrders";
 
 function App() {
   const location = useLocation();
@@ -65,41 +67,53 @@ function App() {
             <MyOrders /> 
           } />
         </Route>
+
+        <Route element={<AdminRoutes />}>
+
+
+          <Route path="/admin" element={
+            <div className="flex">
+              <Sidebar />
+              <Dashboard />
+            </div>
+          } />
+
+          <Route path="/admin/add-product" element={
+            <div className="flex">
+              <Sidebar />
+              <AddProduct />
+            </div>
+          } />
+
+          <Route path="/admin/list-products" element={
+            <div className="flex ">
+              <Sidebar />
+              <ListProducts />
+            </div>
+          }
+          />
+          <Route path="/admin/update/:id" element={
+            <div className="flex">
+              <Sidebar />
+              <UpdateProduct />
+            </div>
+          } />
+
+          <Route path="/admin/users" element={
+            <div className="flex">  
+              <Sidebar />
+              <AllUsers />
+            </div>
+          } /> 
+
+          <Route path="/admin/orders" element={
+            <div className="flex">  
+              <Sidebar />
+              <AllOrders />
+            </div>
+          } />
+        </Route>
         
-        <Route path="/admin" element={
-          <div className="flex">
-            <Sidebar />
-            <Dashboard />
-          </div>
-        } />
-
-        <Route path="/admin/add-product" element={
-          <div className="flex">
-            <Sidebar />
-            <AddProduct />
-          </div>
-        } />
-
-        <Route path="/admin/list-products" element={
-          <div className="flex ">
-            <Sidebar />
-            <ListProducts />
-          </div>
-        }
-        />
-        <Route path="/admin/update/:id" element={
-          <div className="flex">
-            <Sidebar />
-            <UpdateProduct />
-          </div>
-        } />
-
-        <Route path="/admin/users" element={
-          <div className="flex">  
-            <Sidebar />
-            <AllUsers />
-          </div>
-        } /> 
 
       </Routes>
       {!isLoginPage && !isAdminPage && <Footer />}
