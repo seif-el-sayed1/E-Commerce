@@ -32,7 +32,7 @@ export const AddProduct = () => {
     };
 
     return (
-        <div className="m-5 text-white">
+        <div className="m-5 text-white w-full">
             <h1 className="text-3xl font-bold text-[#1E88E5]">Add Product</h1>
 
             <div className="mt-5 bg-[#263238] border border-[#1E88E5] rounded-xl p-5 flex flex-col items-center">
