@@ -1,12 +1,17 @@
-import { useEffect, useContext } from "react";
+import { useEffect, useContext, useState } from "react";
 import { CartContext } from "../context/CartContext";
 import { useNavigate } from "react-router-dom";
 import { PopularProducts } from "../components/PopularProducts";
+import { OrderContext } from "../context/OrderContext";
 
 export const Cart = () => {
     const { cart, getCart, loading, 
         deleteFromCart, increaseQuantity, decreaseQuantity, deleteCart } = useContext(CartContext);
     const navigate = useNavigate();
+    const { submitOrder } = useContext(OrderContext);
+
+    const [address, setAddress] = useState('');
+    const [phone, setPhone] = useState('');
 
     useEffect(() => {
         getCart();
@@ -50,12 +55,36 @@ export const Cart = () => {
                                     <p>Total:</p>
                                     <span>${(cart.total + cart.total * 0.03).toFixed(2)}</span>
                                 </div>
+                                <hr className="my-3 border-gray-600" />
+
+                                <div className="flex gap-3 flex-wrap sm:flex-nowrap">
+                                    <div className="bg-[#121212] border border-[#1E88E5] rounded p-2 w-full">
+                                        <input
+                                            className="outline-none w-full bg-transparent text-white"
+                                            type="number"
+                                            placeholder="phone"
+                                            value={phone}
+                                            onChange={(e) => setPhone(e.target.value)}
+                                            required
+                                        />
+                                    </div>
+                                    <div className="bg-[#121212] border border-[#1E88E5] rounded p-2 w-full">
+                                        <input
+                                            className="outline-none w-full bg-transparent text-white"
+                                            type="text"
+                                            placeholder="address"
+                                            value={address}
+                                            onChange={(e) => setAddress(e.target.value)}
+                                            required
+                                        />  
+                                    </div>
+                                </div>
 
                                 <button
-                                    onClick={() => navigate("/payment")}
+                                    onClick={() => {submitOrder(address, phone); navigate("/my-orders")}}
                                     className="cursor-pointer mt-6 w-full bg-[#1E88E5] hover:bg-[#1565c0] transition text-white font-semibold py-2 px-4 rounded-lg"
                                 >
-                                    Go To Payment
+                                    Make Order Now
                                 </button>
                             </div>
                             {/* Clear Cart */}
