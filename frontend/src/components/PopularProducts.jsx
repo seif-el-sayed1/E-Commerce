@@ -26,6 +26,7 @@ export const PopularProducts = () => {
                 params: {
                     page: 1,
                     limit: 3,
+                    sortOption: "mostSold",
                 }
             });
 
@@ -46,7 +47,7 @@ export const PopularProducts = () => {
     return (
         <div className="mx-6 md:mx-16 lg:mx-24 xl:mx-32 my-10">
             <h2 className="text-2xl font-bold text-[#F5F5F5] mb-8">
-                Popular Products
+                Best Sellers
             </h2>
 
             {loading ? (
