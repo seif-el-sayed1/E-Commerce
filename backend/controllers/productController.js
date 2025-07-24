@@ -143,6 +143,8 @@ const getAllProducts = async (req, res) => {
             sort.finalPrice = 1
         } else if (sortOption === "latest") {
             sort.createdAt = -1
+        } else if (sortOption === "mostSold") {
+            sort.sold = -1; 
         }
 
         const skip = (Number(page) - 1) * Number(limit);
