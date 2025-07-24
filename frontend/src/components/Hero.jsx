@@ -68,7 +68,7 @@ export const Hero = () => {
                 <Swiper
                     spaceBetween={20}
                     slidesPerView={1}
-                    loop={true}
+                    loop={false}
                     autoplay={{
                         delay: 3000,
                         disableOnInteraction: true,
