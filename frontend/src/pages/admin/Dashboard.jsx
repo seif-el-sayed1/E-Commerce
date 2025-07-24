@@ -58,7 +58,7 @@ export const Dashboard = () => {
                         </svg>
                     }
                     label="Total Profit"
-                    value={`$ ${allOrders.totalProfit || 0}`}
+                    value={`$ ${allOrders.totalProfit.toFixed(2) || 0}`}
                 />
             </div>
         </div>
