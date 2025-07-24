@@ -19,6 +19,7 @@ import { UpdateProduct } from "./pages/admin/UpdateProduct";
 import { AllUsers } from "./pages/admin/AllUsers";
 import { MyOrders } from "./pages/MyOrders";
 import { AllOrders } from "./pages/admin/AllOrders";
+import { NotFound } from "./pages/NotFound";
 
 function App() {
   const location = useLocation();
@@ -113,8 +114,9 @@ function App() {
             </div>
           } />
         </Route>
-        
 
+        <Route path='*' element={<NotFound />} />
+        
       </Routes>
       {!isLoginPage && !isAdminPage && <Footer />}
     </>
