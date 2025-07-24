@@ -76,6 +76,7 @@ export const UserContextProvider = (props) => {
                 await getUserData()
             } else {
                 setUserData({})
+                navigate("/")
             }
         } catch (error) {
             const message = error.response?.data?.message || error.message || "Something went wrong";
