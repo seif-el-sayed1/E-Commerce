@@ -35,6 +35,7 @@ export const Hero = () => {
                 params: {
                     page: 1,
                     limit: 3,
+                    sortOption: "latest",
                 },
             });
 
@@ -80,7 +81,7 @@ export const Hero = () => {
                             <div className="flex flex-col md:flex-row h-auto md:h-[300px] bg-[#263238] rounded-xl px-6 py-6 justify-between items-center gap-6">
                                 <div className="w-full md:w-1/2 text-center md:text-left">
                                     <span className="inline-block bg-[#E53935] text-white text-xs font-semibold px-3 py-1 rounded-full mb-3">
-                                        🔥 Best Seller
+                                        🔥 Newest
                                     </span>
 
                                     <h2 className="text-sm md:text-2xl font-semibold text-[#1E88E5] mb-6">
