@@ -29,6 +29,14 @@ export const AddProduct = () => {
 
         await addProduct(formData);
 
+        setImage(null);
+        setTitle("");
+        setDescription("");
+        setPrice("");
+        setCategory("");
+        setStock("");
+        setDiscountPercent("");
+
     };
 
     return (
