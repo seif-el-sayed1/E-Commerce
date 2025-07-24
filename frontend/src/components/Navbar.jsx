@@ -22,11 +22,13 @@ export const Navbar = () => {
                 <Link to="/" className="hover:text-[#64B5F6] transition">Home</Link>
                 <Link to="/products" className="hover:text-[#64B5F6] transition">Products</Link>
                 <Link to="/my-orders" className="hover:text-[#64B5F6] transition">Orders</Link>
-                <Link to="#" className="hover:text-[#64B5F6] transition">About</Link>
                 <Link to="#" className="hover:text-[#64B5F6] transition">Contact</Link>
             </div>
 
             <div className='hidden sm:flex items-center gap-8'>
+                {userData && userData.role === "admin" &&
+                    <Link to="/admin" className='py-1 px-5 bg-[#1E88E5] rounded-lg'>Admin</Link>
+                }
                 {/* Cart */}
                 <Link to="/cart" className="  relative cursor-pointer">
                     <svg width="20" height="20" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -72,6 +74,9 @@ export const Navbar = () => {
 
             {/* Mobile Menu Button */}
             <div className='flex items-center gap-4 sm:hidden'>
+                {userData && userData.role === "admin" &&
+                    <Link to="/admin" className='py-1 px-5 bg-[#1E88E5] rounded-lg'>Admin</Link>
+                }
                 <Link to="/cart" className="  relative cursor-pointer">
                     <svg width="20" height="20" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M.583.583h2.333l1.564 7.81a1.17 1.17 0 0 0 1.166.94h5.67a1.17 1.17 0 0 0 1.167-.94l.933-4.893H3.5m2.333 8.75a.583.583 0 1 1-1.167 0 .583.583 0 0 1 1.167 0m6.417 0a.583.583 0 1 1-1.167 0 .583.583 0 0 1 1.167 0" stroke="#64B5F6" strokeLinecap="round" strokeLinejoin="round" />
