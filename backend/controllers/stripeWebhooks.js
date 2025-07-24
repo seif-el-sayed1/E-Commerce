@@ -33,7 +33,10 @@ const stripeWebhook = async (req, res) => {
                     for (const item of order.products) {
                         await productModel.findByIdAndUpdate(
                             item.productDetails._id,
-                            { $inc: { sold: item.quantity } }
+                            { $inc: {
+                                    sold: item.quantity,
+                                    stock: -item.quantity
+                            }}
                         );
                     }
 
