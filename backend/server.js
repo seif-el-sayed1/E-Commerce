@@ -20,7 +20,7 @@ connectDB();
 connectCloudinary();
 
 app.use(cors({
-    origin: "http://localhost:5173",
+    origin: "https://tech-zone-henna.vercel.app",
     credentials: true
 }));
 
