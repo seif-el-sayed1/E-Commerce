@@ -18,9 +18,11 @@ app.post("/api/stripe", express.raw({ type: "application/json" }), stripeWebhook
 
 connectDB();
 connectCloudinary();
-
+const allowedOrigins = ["http://localhost:5173", "https://tech-zone-henna.vercel.app",
+    "https://tech-zone-qs49p2wnr-seif-el-sayed1s-projects.vercel.app"
+];
 app.use(cors({
-    origin: "https://tech-zone-henna.vercel.app",
+    origin: allowedOrigins,
     credentials: true
 }));
 
