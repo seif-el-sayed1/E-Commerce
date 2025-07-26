@@ -14,7 +14,7 @@ router.get('/google', passport.authenticate('google', { scope: ['profile', 'emai
 
 router.get('/google/callback', passport.authenticate('google', {
     session: false,
-    failureRedirect: 'http://localhost:5173/login'
+    failureRedirect: 'https://tech-zone-iota.vercel.app/auth'
 }), (req, res) => {
     const {token, isNewUser} = req.user;
     res.cookie('token', token, {
