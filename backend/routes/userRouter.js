@@ -24,7 +24,7 @@ router.get('/google/callback', passport.authenticate('google', {
         sameSite: 'none'
     });
     const status = isNewUser ? 'signup_success' : 'login_success';
-    res.redirect('http://localhost:5173');
+    res.redirect('https://tech-zone-iota.vercel.app');
 });
 
 // register 
