@@ -9,7 +9,7 @@ export const Sidebar = () => {
 
     return (
         <div>
-            <div className={`  absolute md:relative w-1/2 md:w-[250px]  md:left-0 border-gray-500 bg-[#263238] h-screen ${open ? 'left-0' : '-left-full'} transition-all duration-300`}>
+            <div className={` z-100 absolute md:relative w-1/2 md:w-[250px]  md:left-0 border-gray-500 bg-[#263238] h-screen ${open ? 'left-0' : '-left-full'} transition-all duration-300`}>
                 <div onClick={() => setOpen(!open)} 
                     className='w-fit p-2 rounded cursor-pointer bg-[#263238]  md:hidden'>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-10 border-1 rounded border-gray-500 p-1">
