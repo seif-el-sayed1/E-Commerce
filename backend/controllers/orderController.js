@@ -111,7 +111,7 @@ const getAllOrders = async (req, res) => {
                 path: "userId",
                 select: "name email" 
             })
-            .sort({ createdAt: 1 });
+            .sort({ createdAt: -1 });
         if (!orders || orders.length === 0) {
             return res.status(404).json({ success: false, message: "No orders found" });
         }
